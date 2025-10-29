@@ -5,12 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Joyeux Anniversaire Ruth Mulimbi — Livre de témoignages</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Merriweather:wght@300;400;700&family=Sacramento&display=swap" rel="stylesheet">
+  <!-- Chargement de Tailwind CSS pour un style rapide et réactif -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- Polices -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Merriweather:wght=300;400;700&family=Sacramento&display=swap" rel="stylesheet">
+
+  <!-- Firebase (Version compatible v9 pour coller au code existant) -->
   <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore-compat.js"></script>
 
   <style>
+    /* VARIABLES COULEURS */
     :root {
       --rose: #d64d77; /* Rose plus profond */
       --rose-fonce: #a82e56; /* Bordeaux pourpre */
@@ -29,42 +35,42 @@
       text-align: center;
       opacity: 0;
       animation: fadeIn 2.2s ease-in-out forwards;
-      border: 8px solid var(--fond-secondaire); /* Cadre élégant */
+      border: 8px solid var(--fond-secondaire); 
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     @keyframes fadeIn {
       to { opacity: 1; }
     }
 
-    /* HERO SECTION (CAROUSEL) */
+    /* --- HERO SECTION --- */
     .hero {
       position: relative;
       overflow: hidden;
-      max-height: 500px; /* Augmenter la hauteur pour l'impact */
+      max-height: 500px;
       width: 100%;
-      box-shadow: var(--shadow-soft);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Ombre plus marquée */
     }
     
     .carousel {
       display: flex;
       width: 800%;
-      transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Transition plus douce */
+      transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       max-height: 500px;
     }
 
     .carousel-item {
       width: 12.5%;
       flex-shrink: 0;
-      position: relative;
     }
 
     .hero-img {
       width: 100%;
       height: 500px;
       object-fit: cover;
-      filter: brightness(80%); /* Moins sombre pour mieux voir les photos */
-      transform-origin: center;
-      transition: transform 0.5s ease-out; /* Effet de zoom au changement de slide si on veut */
+      filter: brightness(75%); /* Laisse le texte ressortir */
     }
 
     .hero-text {
@@ -75,32 +81,30 @@
       color: #fff;
       text-align: center;
       font-family: 'Playfair Display', serif;
-      /* --- MODIFICATION CLÉ : Transparence Totale pour la boite --- */
-      background: rgba(0, 0, 0, 0.05); /* Juste une légère touche de noir pour le blur */
+      background: rgba(0, 0, 0, 0.1); 
       padding: 30px 60px;
       border-radius: 20px;
-      backdrop-filter: blur(2px); /* Un léger flou pour l'effet de profondeur */
+      backdrop-filter: blur(4px); /* Flou augmenté pour un effet premium */
       z-index: 10;
-      border: 2px solid rgba(255, 255, 255, 0.5); /* Bordure subtile et chic */
-      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* Pour aider à la lecture sur fond clair */
+      border: 2px solid rgba(255, 255, 255, 0.6);
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
     }
 
     .hero-text h1 {
-      font-size: 50px; /* Très grand pour l'impact */
-      margin-bottom: 15px;
+      font-size: 55px; /* Très grand pour l'impact */
+      margin-bottom: 10px;
       color: #fff;
       font-weight: 700;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
     }
 
     .hero-text p {
-      font-size: 24px;
-      font-family: 'Sacramento', cursive; /* Style manuscrit pour la citation */
+      font-size: 26px;
+      font-family: 'Sacramento', cursive; 
       color: #fff;
-      font-style: normal;
     }
 
-    /* TITRES et INTRODUCTION */
+    /* --- TITRES et INTRODUCTION --- */
     h1:not(.hero-text h1) {
       color: var(--rose-fonce);
       font-size: 2.5em;
@@ -114,22 +118,16 @@
       color: #555;
     }
 
-    /* FORMULAIRE DESIGN */
+    /* --- FORMULAIRE DESIGN --- */
     form {
       margin: 40px auto;
       max-width: 650px;
       background: #fff;
       padding: 35px;
       border-radius: 16px;
-      box-shadow: var(--shadow-soft);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); /* Ombre plus douce et large */
       text-align: left;
-      border-left: 5px solid var(--rose);
-      transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
-    }
-
-    form:hover {
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        transform: translateY(-5px);
+      border-left: 8px solid var(--rose); /* Bordure plus épaisse */
     }
 
     input, textarea {
@@ -137,7 +135,7 @@
       padding: 15px;
       margin: 10px 0 20px 0;
       border-radius: 10px;
-      border: 1px solid #e0e0e0;
+      border: 1px solid #dcdcdc; /* Ligne plus claire */
       font-size: 1em;
       transition: border-color 0.3s, box-shadow 0.3s;
       resize: vertical;
@@ -146,12 +144,13 @@
     input:focus, textarea:focus {
       outline: none;
       border-color: var(--rose);
-      box-shadow: 0 0 5px rgba(214, 77, 119, 0.5);
+      box-shadow: 0 0 8px rgba(214, 77, 119, 0.5); /* Ombre plus visible */
     }
 
-    button {
+    /* Bouton d'envoi */
+    #testimonialForm button[type="submit"] {
       padding: 12px 25px;
-      background-color: var(--rose);
+      background: linear-gradient(145deg, var(--rose), var(--rose-fonce)); /* Dégradé */
       font-size: 1.1em;
       color: white;
       border: none;
@@ -159,68 +158,104 @@
       cursor: pointer;
       transition: all 0.3s;
       font-weight: 700;
+      box-shadow: 0 4px 10px rgba(168, 46, 86, 0.4);
     }
 
-    button:hover {
+    #testimonialForm button[type="submit"]:hover {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 6px 15px rgba(168, 46, 86, 0.6);
+    }
+
+    /* --- STYLE DU BOUTON "VOIR LE LIVRE" (CLÉ) --- */
+    .book-button {
+      /* Utilisez Tailwind pour un style flottant et centré */
+      @apply inline-flex items-center justify-center 
+             px-8 py-3 mt-8 mb-12 
+             text-lg font-bold text-white 
+             bg-rose-500 rounded-full 
+             shadow-lg hover:shadow-xl hover:scale-[1.03] transition-all duration-300 ease-out;
+
+      /* Couleurs personnalisées */
       background-color: var(--rose-fonce);
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+      background-image: linear-gradient(45deg, var(--rose-fonce), var(--rose));
+      
+      /* Effet de lueur subtile */
+      box-shadow: 0 8px 25px rgba(168, 46, 86, 0.6);
     }
 
-    /* MESSAGES (Livre) */
-    .page {
-      background: #fff;
-      border-radius: 12px;
-      padding: 25px;
-      margin: 20px auto;
-      max-width: 650px;
-      text-align: left;
-      box-shadow: var(--shadow-soft);
-      transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
-      border-top: 4px solid var(--fond-secondaire);
+    .book-button:hover {
+        box-shadow: 0 10px 30px rgba(168, 46, 86, 0.8);
     }
 
-    .page:hover {
-      transform: scale(1.01);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    }
-
-    .page strong {
-      color: var(--rose-fonce);
-      font-size: 1.2em;
-      font-weight: 700;
-    }
-
-    .page p {
-      margin-top: 10px;
-      line-height: 1.7em;
-    }
-
-    /* FOOTER ET LIEN */
+    /* --- FOOTER SIMPLIFIÉ --- */
     footer {
-      margin: 60px 0 30px 0;
-      font-size: 1em;
-      color: #888;
+      margin-top: auto; /* Pousse le footer vers le bas */
+      margin-bottom: 30px;
+      padding-top: 20px;
+      font-size: 0.9em;
+      color: #aaa;
     }
     
     .signature {
-        font-family: 'Sacramento', cursive;
-        font-size: 2.5em;
-        color: var(--rose-fonce);
-        display: block;
-        margin-top: 5px;
+        font-family: 'Merriweather', serif; /* Simplicité, pas de manuscrit ici */
+        font-size: 1em;
+        color: #888;
+        font-weight: 300;
+        display: inline;
+        margin-right: 5px;
+    }
+    .separator {
+        color: #ccc;
     }
 
-    a {
-      color: var(--rose-fonce);
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.3s;
+    /* --- MODAL DE CONFIRMATION (Tailwind) --- */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: none; /* Caché par défaut */
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        backdrop-filter: blur(5px);
     }
 
-    a:hover {
-      color: var(--rose);
-      text-decoration: underline;
+    .modal-content {
+        background-color: white;
+        padding: 30px 40px;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        max-width: 90%;
+        animation: scaleIn 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        text-align: center;
+    }
+
+    @keyframes scaleIn {
+        from { transform: scale(0.7); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+    /* Message d'erreur personnalisé dans le formulaire */
+    #errorMessage {
+        color: #e3342f; /* Rouge vif */
+        background-color: #fcebeb; /* Fond très pâle */
+        border: 1px solid #f9d8d8;
+        padding: 8px;
+        border-radius: 8px;
+        margin-top: -10px;
+        margin-bottom: 20px;
+        font-size: 0.9em;
+        font-weight: 500;
+        display: none;
+        animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     @media (max-width: 600px) {
@@ -229,141 +264,203 @@
       }
       .hero-text h1 { font-size: 40px; }
       .hero-text p { font-size: 20px; }
-      form, .page { width: 90%; }
-      .hero-img { height: 400px; }
+      form { width: 90%; }
+      .hero-img { height: 350px; }
       h1:not(.hero-text h1) { margin-top: 30px; font-size: 2em; }
     }
   </style>
 </head>
 
 <body>
-  <section class="hero">
-    <div class="carousel" id="heroCarousel">
-      <div class="carousel-item"><img src="photo1.JPG" alt="Ruth Mulimbi - Photo 1" class="hero-img"></div>
-      <div class="carousel-item"><img src="photo2.jpg" alt="Ruth Mulimbi - Photo 2" class="hero-img"></div>
-      <div class="carousel-item"><img src="photo3.JPG" alt="Ruth Mulimbi - Photo 3" class="hero-img"></div>
-      <div class="carousel-item"><img src="photo4.JPG" alt="Ruth Mulimbi - Photo 4" class="hero-img"></div>
-      <div class="carousel-item"><img src="photo5.JPG" alt="Ruth Mulimbi - Photo 5" class="hero-img"></div>
-      <div class="carousel-item"><img src="photo6.JPG" alt="Ruth Mulimbi - Photo 6" class="hero-img"></div>
-      <div class="carousel-item"><img src="photo7.JPG" alt="Ruth Mulimbi - Photo 7" class="hero-img"></div>
-      <div class="carousel-item"><img src="photo8.JPG" alt="Ruth Mulimbi - Photo 8" class="hero-img"></div>
+  <!-- Contenu Principal -->
+  <main class="flex-grow">
+    <section class="hero">
+      <div class="carousel" id="heroCarousel">
+        <!-- Remplacer les chemins d'images par des placeholders/fallbacks si les fichiers locaux ne sont pas garantis -->
+        <div class="carousel-item"><img src="https://placehold.co/1200x500/d64d77/ffffff?text=Photo+1" onerror="this.onerror=null;this.src='https://placehold.co/1200x500/d64d77/ffffff?text=Photo+1'" alt="Ruth Mulimbi - Photo 1" class="hero-img"></div>
+        <div class="carousel-item"><img src="https://placehold.co/1200x500/a82e56/ffffff?text=Photo+2" onerror="this.onerror=null;this.src='https://placehold.co/1200x500/a82e56/ffffff?text=Photo+2'" alt="Ruth Mulimbi - Photo 2" class="hero-img"></div>
+        <div class="carousel-item"><img src="https://placehold.co/1200x500/d64d77/ffffff?text=Photo+3" onerror="this.onerror=null;this.src='https://placehold.co/1200x500/d64d77/ffffff?text=Photo+3'" alt="Ruth Mulimbi - Photo 3" class="hero-img"></div>
+        <div class="carousel-item"><img src="https://placehold.co/1200x500/a82e56/ffffff?text=Photo+4" onerror="this.onerror=null;this.src='https://placehold.co/1200x500/a82e56/ffffff?text=Photo+4'" alt="Ruth Mulimbi - Photo 4" class="hero-img"></div>
+        <div class="carousel-item"><img src="https://placehold.co/1200x500/d64d77/ffffff?text=Photo+5" onerror="this.onerror=null;this.src='https://placehold.co/1200x500/d64d77/ffffff?text=Photo+5'" alt="Ruth Mulimbi - Photo 5" class="hero-img"></div>
+        <div class="carousel-item"><img src="https://placehold.co/1200x500/a82e56/ffffff?text=Photo+6" onerror="this.onerror=null;this.src='https://placehold.co/1200x500/a82e56/ffffff?text=Photo+6'" alt="Ruth Mulimbi - Photo 6" class="hero-img"></div>
+        <div class="carousel-item"><img src="https://placehold.co/1200x500/d64d77/ffffff?text=Photo+7" onerror="this.onerror=null;this.src='https://placehold.co/1200x500/d64d77/ffffff?text=Photo+7'" alt="Ruth Mulimbi - Photo 7" class="hero-img"></div>
+        <div class="carousel-item"><img src="https://placehold.co/1200x500/a82e56/ffffff?text=Photo+8" onerror="this.onerror=null;this.src='https://placehold.co/1200x500/a82e56/ffffff?text=Photo+8'" alt="Ruth Mulimbi - Photo 8" class="hero-img"></div>
+      </div>
+      
+      <div class="hero-text">
+        <h1>🌸 Ruth Mulimbi</h1>
+        <p>« Joyeux Anniversaire Maria (30/10) ! Digne de ta beauté et de ta gentillesse. »</p>
+      </div>
+    </section>
+
+    <h1>📖 LE CADEAU DES MOTS</h1>
+    <p>Écris un mot doux, un souvenir ou une bénédiction pour elle en ce jour 💌 Ton message sera une surprise !</p>
+
+    <!-- FORMULAIRE -->
+    <form id="testimonialForm">
+      <label for="name" class="font-bold text-gray-700 block mb-1">Votre prénom et Nom :</label>
+      <input type="text" id="name" placeholder="Ex :  Benedicte Nyota" required />
+      
+      <label for="message" class="font-bold text-gray-700 block mb-1">Votre message :</label>
+      <textarea id="message" rows="4" placeholder="Ex : Joyeux anniversaire Ruth ! Reste cette belle personne. 💖" required></textarea>
+      
+      <!-- Message d'erreur stylisé (remplace alert) -->
+      <div id="errorMessage" role="alert"></div>
+
+      <button type="submit">✨ Ajouter au livre</button>
+    </form>
+
+    <!-- BOUTON VOIR LE LIVRE (Nouveau style) -->
+    <div>
+        <a href="livre.html" class="book-button">
+            <!-- Icône d'un livre (SVG intégré) -->
+            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.5l8 4.5v8l-8 4.5-8-4.5v-8l8-4.5zM12 6.5v11.5M4 11l8 4.5 8-4.5M4 11v8M20 11v8"></path></svg>
+            Voir le livre de messages
+        </a>
     </div>
-    
-    <div class="hero-text">
-      <h1>🌸 Ruth Mulimbi</h1>
-      <p>« Joyeux Anniversaire Maria (30/10) ! Digne de ta beauté et de ta gentillesse. »</p>
+
+    <!-- Section Contact & Commandes (Utilisation de classes Tailwind pour un style moderne) -->
+    <div class="max-w-xl mx-auto mt-12 mb-12 p-6 bg-white rounded-xl shadow-lg border-l-4 border-rose-500">
+      <h3 class="text-xl font-bold text-gray-800 mb-3">📞 Contact & Commandes</h3>
+      <div class="text-gray-600 space-y-2">
+        <p class="flex items-center justify-center">
+            <svg class="w-5 h-5 mr-2 text-rose-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+            <strong>📱 Téléphone / WhatsApp :</strong> <a href="tel:+243997227819" class="text-rose-600 hover:text-rose-800 ml-1">+243 99 72 27 819</a>
+        </p>
+        <p class="flex items-center justify-center">
+            <svg class="w-5 h-5 mr-2 text-rose-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 12A1.5 1.5 0 0015 10.5V6a2 2 0 00-2-2H7a2 2 0 00-2 2v4.5A1.5 1.5 0 006.5 12H7v1.5a.5.5 0 00.5.5h5a.5.5 0 00.5-.5V12h-.5zM7 6h6v4H7V6z"></path></svg>
+            <strong>🌐 Site web :</strong> <a href="https://the-gift-of-words.rf.gd/?i=1" target="_blank" class="text-rose-600 hover:text-rose-800 ml-1">the-gift-of-words.rf.gd</a>
+        </p>
+      </div>
     </div>
-  </section>
+  </main>
 
-  <h1>📖 THE GIFT OF WORDS</h1>
-  <p>Écris un mot doux, un souvenir ou une bénédiction pour elle en ce jour 💌 Ton message apparaîtra en direct !</p>
+  <!-- PIED DE PAGE SIMPLIFIÉ -->
+  <footer> 
+    <span class="signature">Gabby Umba</span>
+    <span class="separator">—</span> 
+    <span class="text-gray-500">© 2025</span>
+  </footer>
 
-  <form id="testimonialForm">
-    <label for="name"><strong>Votre prénom et Nom :</strong></label>
-    <input type="text" id="name" placeholder="Ex :  Benedicte Nyota" required />
-    <label for="message"><strong>Votre message :</strong></label>
-    <textarea id="message" rows="4" placeholder="Ex : Joyeux anniversaire Ruth ! Reste cette belle personne. 💖" required></textarea>
-    <button type="submit">✨ Ajouter au livre</button>
-    <div id="confirmation" class="confirmation"> Votre message a été ajouté avec succès 💌</div>
-  </form>
+  <!-- MODAL DE CONFIRMATION (Initialement caché) -->
+  <div id="successModal" class="modal-overlay">
+    <div class="modal-content">
+        <!-- Icône de succès (SVG vert) -->
+        <svg class="mx-auto w-16 h-16 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <h2 class="text-2xl font-bold text-gray-800 mt-4 mb-2">Message envoyé !</h2>
+        <p class="text-gray-600">Votre mot doux a été ajouté au livre. Ruth le découvrira bientôt !</p>
+        
+        <p class="mt-6 text-sm">
+            Vous pouvez maintenant <a href="livre.html" class="font-semibold text-rose-500 hover:underline">cliquer sur le bouton Voir le livre</a> pour visualiser tous les messages.
+        </p>
 
-  <div style="margin-top: 20px;">
-  <a href="livre.html"><strong>📘 Voir le livre complet imprimable</strong></a>
-</div>
+        <button onclick="document.getElementById('successModal').style.display='none'" class="mt-6 px-4 py-2 bg-rose-500 text-white rounded-lg hover:bg-rose-600 transition duration-150">
+            Fermer
+        </button>
+    </div>
+  </div>
 
-<div id="book"></div>
-
-<!-- 📞 Section Contact & Commandes -->
-<div style="margin-top: 40px; padding: 20px; background-color: #f9f9f9; border-radius: 12px; text-align: center; font-family: 'Inter', sans-serif;">
-  <h3 style="color: #1e3a8a;">📞 Contact & Commandes</h3>
-  <p><strong>📱 Téléphone / WhatsApp :</strong> <a href="tel:+243997227819">+243 99 72 27 819</a></p>
-  <p><strong>🌐 Site web :</strong> <a href="https://the-gift-of-words.rf.gd/?i=1" target="_blank">the-gift-of-words.rf.gd</a></p>
-</div>
-
-<footer> 
-  <span class="signature">Gabby Umba</span>
-  — © 2025
-</footer>
 
   <script>
-    // NOUVELLE CONFIGURATION FIREBASE
-    const firebaseConfig = {
-      apiKey: "AIzaSyAhPwoUbZT-ui8YZCl7747-hOWrXpglhvM",
-      authDomain: "lwangagestion.firebaseapp.com",
-      projectId: "lwangagestion",
-      storageBucket: "lwangagestion.firebasestorage.app",
-      messagingSenderId: "1052448880149",
-      appId: "1:1052448880149:web:74761213a03bc53770801c"
-    };
-    // FIN NOUVELLE CONFIGURATION FIREBASE
-
-    firebase.initializeApp(firebaseConfig);
+    // Variables globales fournies par l'environnement Canvas
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+    
+    // Utilisation de la configuration Firebase dynamique si elle est disponible
+    const firebaseConfig = typeof __firebase_config !== 'undefined' 
+        ? JSON.parse(__firebase_config) 
+        : {
+            // Configuration de secours si non disponible
+            apiKey: "AIzaSyAhPwoUbZT-ui8YZCl7747-hOWrXpglhvM",
+            authDomain: "lwangagestion.firebaseapp.com",
+            projectId: "lwangagestion",
+            storageBucket: "lwangagestion.firebasestorage.app",
+            messagingSenderId: "1052448880149",
+            appId: "1:1052448880149:web:74761213a03bc53770801c"
+        };
+    
+    // Initialisation Firebase (compatible v9)
+    const app = firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
+    // Références aux éléments du DOM
     const form = document.getElementById('testimonialForm');
-    const book = document.getElementById('book');
-    const confirmation = document.getElementById('confirmation');
+    const successModal = document.getElementById('successModal');
+    const errorMessage = document.getElementById('errorMessage');
     const carousel = document.getElementById('heroCarousel');
     const totalImages = 8; 
     let currentIndex = 0;
 
     // --- LOGIQUE DU CAROUSEL ---
     function startCarousel() {
-      setInterval(() => {
-        currentIndex = (currentIndex + 1) % totalImages;
-        const offset = -currentIndex * (100 / totalImages);
-        carousel.style.transform = `translateX(${offset}%)`;
-      }, 5000); // Change l'image toutes les 5 secondes
+      if (carousel) {
+        setInterval(() => {
+          currentIndex = (currentIndex + 1) % totalImages;
+          // Assurez-vous que le calcul de décalage est correct pour 8 images
+          const offset = -currentIndex * (100 / totalImages); 
+          carousel.style.transform = `translateX(${offset}%)`;
+        }, 5000); 
+      }
     }
     
-    // Assurez-vous que le carrousel commence une fois que le DOM est prêt
     document.addEventListener('DOMContentLoaded', startCarousel);
     // --- FIN LOGIQUE DU CAROUSEL ---
 
+    // --- LOGIQUE DU FORMULAIRE ---
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const name = document.getElementById('name').value.trim();
-      const message = document.getElementById('message').value.trim();
+      
+      // Réinitialiser les messages d'erreur et de succès
+      errorMessage.style.display = 'none';
+      successModal.style.display = 'none';
+
+      const nameInput = document.getElementById('name');
+      const messageInput = document.getElementById('message');
+      
+      const name = nameInput.value.trim();
+      const message = messageInput.value.trim();
 
       if (name.length < 2 || message.length < 5) {
-        alert("Merci d’écrire un vrai prénom et un message sincère 💕");
+        // Affichage du message d'erreur stylisé (remplacement de l'alert)
+        errorMessage.textContent = "Merci d’écrire un vrai prénom (min 2 caractères) et un message sincère (min 5 caractères) 💕";
+        errorMessage.style.display = 'block';
         return;
       }
 
-      await db.collection("testimonials").add({
-        name,
-        message,
-        timestamp: Date.now()
-      });
+      // Chemin de la collection Firestore (dans l'espace public de l'application)
+      const collectionPath = `artifacts/${appId}/public/data/testimonials`;
 
-      form.reset();
-      confirmation.style.opacity = '1';
-      setTimeout(() => { confirmation.style.opacity = '0'; }, 4000);
+      try {
+        await db.collection(collectionPath).add({
+          name: name,
+          message: message,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp() // Utilisation du timestamp serveur
+        });
+
+        // Succès : Afficher le modal
+        form.reset();
+        successModal.style.display = 'flex';
+        
+      } catch (error) {
+        console.error("Erreur lors de l'ajout du document: ", error);
+        errorMessage.textContent = "Désolé, une erreur s'est produite lors de l'envoi de votre message. Veuillez réessayer.";
+        errorMessage.style.display = 'block';
+      }
     });
 
-    function shareWhatsApp(message) {
-      // Message personnalisé pour Ruth
-      const encoded = encodeURIComponent(`Message pour Ruth Mulimbi :\n\n${message}`);
-      window.open(`https://wa.me/?text=${encoded}`, '_blank');
+    // --- RETRAIT DE LA LOGIQUE D'AFFICHAGE DES MESSAGES (onSnapshot) ---
+    // La fonction qui lisait et affichait les messages en direct a été supprimée, 
+    // car l'utilisateur ne veut voir que le formulaire sur cette page.
+    
+    // --- LOGIQUE D'ERREUR PERSONNALISÉE ---
+    function showCustomError(msg) {
+        // Fonction pour afficher une erreur personnalisée si jamais besoin dans le futur
+        // Pour l'instant, c'est géré par #errorMessage
+        errorMessage.textContent = msg;
+        errorMessage.style.display = 'block';
     }
 
-    db.collection("testimonials").orderBy("timestamp", "desc").onSnapshot(snapshot => {
-      book.innerHTML = "";
-      snapshot.forEach(doc => {
-        const data = doc.data();
-        const page = document.createElement('div');
-        page.className = 'page';
-        page.innerHTML = `
-          <strong>${data.name || "Anonyme"}</strong> écrit :<br>
-          <p>${data.message}</p>
-          <button class="whatsapp-button" onclick="shareWhatsApp('${data.message.replace(/'/g, "\\'")}')">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
-            Partager sur WhatsApp
-          </button>
-        `;
-        book.appendChild(page);
-      });
-    });
   </script>
 </body>
 </html>
+
+
