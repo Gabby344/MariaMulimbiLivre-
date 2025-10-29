@@ -2,230 +2,357 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ajouter un Souhait – Livre des Témoignages</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Joyeux Anniversaire Ruth Mulimbi — Livre de témoignages</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Merriweather:ital,wght@0,300;0,700;1,300;1,400&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'primary-wine': '#8a0c4f', /* Bordeaux Profond */
-                        'secondary-pink': '#d64d77', /* Rose doux pour l'accentuation */
-                        'bg-paper': '#fcfaf9', /* Beige très clair */
-                    },
-                    fontFamily: {
-                        'serif': ['Merriweather', 'serif'],
-                        'display': ['Playfair Display', 'serif'],
-                    }
-                }
-            }
-        }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Merriweather:wght@300;400;700&family=Sacramento&display=swap" rel="stylesheet">
+
+    <!-- Firebase Compat v9 pour la compatibilité avec l'environnement -->
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore-compat.js"></script>
 
     <style>
+        /* VARIABLES COULEURS (Ajustées pour Tailwind) */
+        :root {
+            --rose: #d64d77; 
+            --rose-fonce: #8a0c4f; /* Assorti au primary-wine de livre.html */
+            --fond: #fffcf8; 
+            --fond-secondaire: #ffe4e9; 
+            --texte: #3c3c3c;
+        }
+
         body {
             font-family: 'Merriweather', serif;
-            background-color: theme('colors.bg-paper');
-            line-height: 1.6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background: linear-gradient(120deg, var(--fond), var(--fond-secondaire));
+            color: var(--texte);
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 2.2s ease-in-out forwards;
+            border: 8px solid var(--fond-secondaire); 
             min-height: 100vh;
-            color: theme('colors.gray.800');
-            padding: 20px;
+            display: flex;
+            flex-direction: column;
         }
 
-        .container {
-            max-width: 600px;
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            position: relative;
+            overflow: hidden;
+            max-height: 500px;
             width: 100%;
-            padding: 30px;
-            background-color: white;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1); 
-            border-radius: 16px;
-            border: 1px solid theme('colors.gray.100');
-        }
-
-        h1 {
-            font-family: 'Playfair Display', serif;
-            letter-spacing: 1px;
-        }
-
-        .submit-button {
-            /* Dégradé de couleur audacieux */
-            background: linear-gradient(135deg, theme('colors.primary-wine'), theme('colors.secondary-pink'));
-            
-            /* Utilisation des classes Tailwind pour la mise en forme et les effets */
-            @apply w-full inline-flex justify-center items-center 
-                   px-8 py-3 mt-6 
-                   rounded-lg text-white 
-                   text-lg font-extrabold tracking-wider 
-                   transition-all duration-300 transform 
-                   hover:scale-[1.01] hover:shadow-2xl; 
-            
-            /* Ombre plus profonde et colorée pour un effet 3D professionnel */
-            box-shadow: 0 5px 20px rgba(138, 12, 79, 0.5); 
-        }
-
-        .submit-button:hover {
-            box-shadow: 0 8px 30px rgba(138, 12, 79, 0.7);
-        }
-
-        .input-field {
-            @apply w-full p-3 border border-gray-300 rounded-lg focus:ring-primary-wine focus:border-primary-wine transition duration-200;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); 
         }
         
-        .message-box {
-            @apply w-full p-4 border border-gray-300 rounded-lg h-32 resize-none focus:ring-primary-wine focus:border-primary-wine transition duration-200;
+        /* CAROUSEL CSS: 9 éléments (8+1 clone) * 100% = 900% */
+        .carousel {
+            display: flex;
+            width: 900%; 
+            transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            max-height: 500px;
         }
+
+        .carousel-item {
+            width: calc(100% / 9); /* Chaque élément prend 1/9 de la largeur totale */
+            flex-shrink: 0;
+        }
+
+        .hero-img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            filter: brightness(75%); 
+        }
+
+        .hero-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            background: rgba(0, 0, 0, 0.15); 
+            padding: 30px 60px;
+            border-radius: 20px;
+            backdrop-filter: blur(4px); 
+            z-index: 10;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 0 15px rgba(0,0,0,0.5); /* Ombre ajoutée pour le contraste */
+        }
+        
+        /* Ajustements mobiles pour le texte du carrousel */
+        @media (max-width: 600px) {
+            .hero-text {
+                width: 90%;
+                padding: 15px 10px;
+                white-space: nowrap; /* Empêche le saut de ligne des émojis */
+            }
+            .hero-text h1 { font-size: 36px !important; margin-bottom: 5px; }
+            .hero-text p { font-size: 18px !important; }
+            .hero-img { height: 350px; }
+        }
+
+
+        .hero-text h1 { font-size: 55px; margin-bottom: 10px; color: #fff; font-weight: 700; letter-spacing: 3px; }
+        .hero-text p { font-size: 26px; font-family: 'Sacramento', cursive; color: #fff; }
+
+        /* --- TITRES et INTRODUCTION --- */
+        h1:not(.hero-text h1) {
+            color: var(--rose-fonce);
+            font-size: 2.5em;
+            margin-top: 50px;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        p { font-size: 1.1em; color: #555; }
+
+        /* --- FORMULAIRE DESIGN --- */
+        form { margin: 40px auto; max-width: 650px; background: #fff; padding: 35px; border-radius: 16px; box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); text-align: left; border-left: 8px solid var(--rose); }
+        input, textarea { width: 100%; padding: 15px; margin: 10px 0 20px 0; border-radius: 10px; border: 1px solid #dcdcdc; font-size: 1em; transition: border-color 0.3s, box-shadow 0.3s; resize: vertical; }
+        input:focus, textarea:focus { outline: none; border-color: var(--rose); box-shadow: 0 0 8px rgba(214, 77, 119, 0.5); }
+        #testimonialForm button[type="submit"] { padding: 12px 25px; background: linear-gradient(145deg, var(--rose), var(--rose-fonce)); font-size: 1.1em; color: white; border: none; border-radius: 10px; cursor: pointer; transition: all 0.3s; font-weight: 700; box-shadow: 0 4px 10px rgba(138, 12, 79, 0.4); }
+        #testimonialForm button[type="submit"]:hover { transform: translateY(-2px) scale(1.01); box-shadow: 0 6px 15px rgba(138, 12, 79, 0.6); }
+
+        /* --- STYLE DU BOUTON "VOIR LE LIVRE" --- */
+        .book-button {
+            @apply inline-flex items-center justify-center 
+                   px-10 py-4 mt-8 mb-16
+                   text-xl font-extrabold text-white
+                   rounded-full 
+                   shadow-2xl hover:shadow-xl hover:scale-[1.05]
+                   transition-all duration-300 ease-out;
+
+            background-color: var(--rose-fonce);
+            background-image: linear-gradient(45deg, var(--rose-fonce), var(--rose));
+            
+            box-shadow: 0 10px 30px rgba(138, 12, 79, 0.7), 0 0 0 3px rgba(255, 255, 255, 0.5);
+            border: none;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .book-button:hover { box-shadow: 0 12px 35px rgba(138, 12, 79, 0.9); }
+
+        /* --- FOOTER SIMPLIFIÉ & RESPONSIVE --- */
+        footer { margin-top: auto; margin-bottom: 30px; padding-top: 20px; font-size: 0.9em; color: #aaa; }
+        .signature { font-family: 'Merriweather', serif; font-size: 1em; color: #888; font-weight: 300; display: inline; margin-right: 5px; }
+        .separator { color: #ccc; }
+        
+        /* Modals & Erreur */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); display: none; align-items: center; justify-content: center; z-index: 100; backdrop-filter: blur(5px); }
+        .modal-content { background-color: white; padding: 30px 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4); max-width: 90%; animation: scaleIn 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55); text-align: center; border-top: 5px solid var(--rose); }
+        @keyframes scaleIn { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        #errorMessage { color: #e3342f; background-color: #fcebeb; border: 1px solid #f9d8d8; padding: 8px; border-radius: 8px; margin-top: -10px; margin-bottom: 20px; font-size: 0.9em; font-weight: 500; display: none; }
+
+        @media (max-width: 600px) {
+            h1:not(.hero-text h1) { margin-top: 30px; font-size: 2em; }
+        }
+
+        .contact-info-item { display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <h1 class="text-3xl text-center text-primary-wine mb-2">Ajoutez Votre Souhait</h1>
-        <p class="text-center text-gray-500 mb-8 font-serif">Partagez votre bénédiction pour Ruth Mulimbi.</p>
+    <main class="flex-grow">
+        
+        <section class="hero">
+            <div class="carousel" id="heroCarousel">
+                <!-- Remplacement des chemins d'images locaux par des placeholders élégants -->
+                <div class="carousel-item"><img src="https://placehold.co/800x500/d64d77/ffffff?text=Photo+1" alt="Ruth Mulimbi - Photo 1" class="hero-img"></div>
+                <div class="carousel-item"><img src="https://placehold.co/800x500/a82e56/ffffff?text=Photo+2" alt="Ruth Mulimbi - Photo 2" class="hero-img"></div>
+                <div class="carousel-item"><img src="https://placehold.co/800x500/d64d77/ffffff?text=Photo+3" alt="Ruth Mulimbi - Photo 3" class="hero-img"></div>
+                <div class="carousel-item"><img src="https://placehold.co/800x500/8a0c4f/ffffff?text=Photo+4" alt="Ruth Mulimbi - Photo 4" class="hero-img"></div>
+                <div class="carousel-item"><img src="https://placehold.co/800x500/d64d77/ffffff?text=Photo+5" alt="Ruth Mulimbi - Photo 5" class="hero-img"></div>
+                <div class="carousel-item"><img src="https://placehold.co/800x500/a82e56/ffffff?text=Photo+6" alt="Ruth Mulimbi - Photo 6" class="hero-img"></div>
+                <div class="carousel-item"><img src="https://placehold.co/800x500/d64d77/ffffff?text=Photo+7" alt="Ruth Mulimbi - Photo 7" class="hero-img"></div>
+                <div class="carousel-item"><img src="https://placehold.co/800x500/8a0c4f/ffffff?text=Photo+8" alt="Ruth Mulimbi - Photo 8" class="hero-img"></div>
+                <!-- CLONE DE LA PREMIÈRE IMAGE POUR LA BOUCLE INFINIE -->
+                <div class="carousel-item" id="firstClone"><img src="https://placehold.co/800x500/d64d77/ffffff?text=Photo+1" alt="Ruth Mulimbi - Photo 1" class="hero-img"></div>
+            </div>
+            
+            <div class="hero-text">
+                <h1>🌸 Ruth Mulimbi</h1>
+                <p>« Joyeux Anniversaire Maria (30/10) ! Digne de ta beauté et de ta gentillesse. »</p>
+            </div>
+        </section>
+
+        <h1>📖 LE CADEAU DES MOTS</h1>
+        <p>Écris un mot doux, un souvenir ou une bénédiction pour elle en ce jour 💌 Ton message sera une surprise !</p>
 
         <form id="testimonialForm">
-            <div class="mb-4">
-                <label for="name" class="block text-gray-700 font-semibold mb-2">Votre Nom (ou Surnom) :</label>
-                <input type="text" id="name" name="name" class="input-field" placeholder="Ex: Gabby Umba" required>
-            </div>
+            <label for="name" class="font-bold text-gray-700 block mb-1">Votre prénom et Nom :</label>
+            <input type="text" id="name" placeholder="Ex :  Benedicte Nyota" required />
+            
+            <label for="message" class="font-bold text-gray-700 block mb-1">Votre message :</label>
+            <textarea id="message" rows="4" placeholder="Ex : Joyeux anniversaire Ruth ! Reste cette belle personne. 💖" required></textarea>
+            
+            <div id="errorMessage" role="alert"></div>
 
-            <div class="mb-4">
-                <label for="message" class="block text-gray-700 font-semibold mb-2">Votre Message de Bénédiction :</label>
-                <textarea id="message" name="message" class="message-box" placeholder="Écrivez ici votre message d'amour et de bénédiction..." required></textarea>
-            </div>
-
-            <button type="submit" class="submit-button" id="submitBtn">
-                <span id="buttonText">Envoyer Mon Souhait</span>
-                <svg id="loadingSpinner" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-            </button>
+            <button type="submit">✨ Ajouter au livre</button>
         </form>
-        
-        <div id="statusMessage" class="mt-4 p-3 text-center rounded-lg hidden" role="alert"></div>
 
-        <div class="text-center mt-6">
-            <a href="livre.html" class="text-secondary-pink hover:text-primary-wine font-bold underline transition duration-200">
-                → Voir tous les souhaits dans le Livre
+        <div>
+            <a href="livre_temoignages_maj.html" class="book-button">
+                <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.5l8 4.5v8l-8 4.5-8-4.5v-8l8-4.5zM12 6.5v11.5M4 11l8 4.5 8-4.5M4 11v8M20 11v8"></path></svg>
+                Voir le livre de messages
             </a>
+        </div>
+
+        <div class="max-w-xl mx-auto mt-12 mb-12 p-6 bg-white rounded-xl shadow-lg border-l-4 border-rose-500">
+            <h3 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">📞 Contact & Commandes</h3>
+            <div class="text-gray-700 space-y-4">
+                
+                <div class="contact-info-item">
+                    <svg class="w-6 h-6 mr-3 text-rose-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.774a11.037 11.037 0 006.107 6.107l.774-1.548a1 1 0 011.06-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-7A15.996 15.996 0 012 3z"></path></svg>
+                    <p>
+                        <strong>WhatsApp :</strong> 
+                        <a href="tel:+243997227819" class="text-rose-600 hover:text-rose-800 font-semibold transition-colors duration-200 ml-1">+243 99 72 27 819</a>
+                    </p>
+                </div>
+                
+                <div class="contact-info-item">
+                    <svg class="w-6 h-6 mr-3 text-rose-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 9.4A10.869 10.869 0 0110 4.64v.364A5.99 5.99 0 006.84 10a5.99 5.99 0 003.16 5.036v.364a10.869 10.869 0 01-5.668-4.76zm11.336 0c.34-.6.532-1.282.532-2A1.5 1.5 0 0014.5 7h-9.2a1.5 1.5 0 000 3H12a2 2 0 110 4h-.2A9.878 9.878 0 0110 14.36v-.364a5.99 5.99 0 003.16-5.036 5.99 5.99 0 00-3.16-5.036v-.364A10.869 10.869 0 0115.668 9.4z" clip-rule="evenodd"></path></svg>
+                    <p>
+                        <strong>Site web :</strong> 
+                        <a href="https://the-gift-of-words.rf.gd/?i=1" target="_blank" class="text-rose-600 hover:text-rose-800 font-semibold transition-colors duration-200 ml-1">the-gift-of-words.rf.gd</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer> 
+        <span class="signature">Gabby Umba</span>
+        <span class="separator">—</span> 
+        <span class="text-gray-500">© 2025</span>
+    </footer>
+
+    <div id="successModal" class="modal-overlay">
+        <div class="modal-content">
+            <svg class="mx-auto w-16 h-16 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <h2 class="text-2xl font-bold text-gray-800 mt-4 mb-2">Message envoyé !</h2>
+            <p class="text-gray-600">Votre mot doux a été ajouté au livre. Ruth le découvrira bientôt !</p>
+            
+            <p class="mt-6 text-sm">
+                Vous pouvez maintenant <a href="livre_temoignages_maj.html" class="font-semibold text-rose-500 hover:underline">cliquer sur le bouton Voir le livre</a> pour visualiser tous les messages.
+            </p>
+
+            <button onclick="document.getElementById('successModal').style.display='none'" class="mt-6 px-4 py-2 bg-rose-500 text-white rounded-lg hover:bg-rose-600 transition duration-150">
+                Fermer
+            </button>
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js";
-        import { getAuth, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js";
 
-        // --- GESTION DES CONFIGURATIONS CANVAS / FIREBASE ---
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+    <script>
+        // Variables globales fournies par l'environnement Canvas
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'lwangagestion';
         
-        let firebaseConfig = null;
-        try {
-            firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
-        } catch (e) {
-            console.error("Erreur de parsing de __firebase_config:", e);
-        }
+        // --- VOS NOUVELLES CLÉS FIREBASE INTÉGRÉES ICI (Ligne 360) ---
+        const firebaseConfig = typeof __firebase_config !== 'undefined' 
+            ? JSON.parse(__firebase_config) 
+            : {
+                apiKey: "AIzaSyCQdZppl-UsPCXF8iFmXQpcGAFjHEMt838",
+                authDomain: "gestion-saint-charles-lwanga.firebaseapp.com",
+                projectId: "gestion-saint-charles-lwanga",
+                storageBucket: "gestion-saint-charles-lwanga.firebasestorage.app",
+                messagingSenderId: "508302363143",
+                appId: "1:508302363143:web:35c181528dd84def1a78a2"
+            };
+        // -----------------------------------------------------------
 
-        // Références DOM
+        // Initialisation Firebase (compatible v9)
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Références aux éléments du DOM
         const form = document.getElementById('testimonialForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const buttonText = document.getElementById('buttonText');
-        const loadingSpinner = document.getElementById('loadingSpinner');
-        const statusMessage = document.getElementById('statusMessage');
+        const successModal = document.getElementById('successModal');
+        const errorMessage = document.getElementById('errorMessage');
+        const carousel = document.getElementById('heroCarousel');
+        const totalImages = 8; 
+        let currentIndex = 0;
+        const transitionDuration = 1200; 
 
-        let db, auth;
+        // --- LOGIQUE DU CAROUSEL (Défilement en boucle corrigé) ---
+        function startCarousel() {
+            if (!carousel) return;
 
-        // --- AUTHENTIFICATION ET INITIALISATION FIREBASE ---
-        async function authenticate() {
-            if (!firebaseConfig) {
-                statusMessage.textContent = "Erreur: Configuration Firebase non trouvée. L'envoi est désactivé.";
-                statusMessage.className = 'mt-4 p-3 text-center rounded-lg bg-red-100 text-red-700 block';
-                submitBtn.disabled = true;
-                return;
-            }
+            // La largeur de chaque slide doit être 1/(Total + 1 clone)
+            const slideWidth = 100 / (totalImages + 1); 
+            
+            setInterval(() => {
+                currentIndex++;
+                const offset = -currentIndex * slideWidth; 
+                carousel.style.transition = `transform ${transitionDuration / 1000}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+                carousel.style.transform = `translateX(${offset}%)`;
 
-            try {
-                const app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-                
-                // Connexion de l'utilisateur (anonyme ou avec custom token)
-                if (initialAuthToken) {
-                    await signInWithCustomToken(auth, initialAuthToken);
-                } else {
-                    await signInAnonymously(auth);
+                // Logique de bouclage après être arrivé sur le clone
+                if (currentIndex >= totalImages) {
+                    setTimeout(() => {
+                        // Réinitialiser la position à la première image sans transition
+                        carousel.style.transition = 'none';
+                        currentIndex = 0;
+                        carousel.style.transform = 'translateX(0)';
+                    }, transitionDuration); 
                 }
-                console.log("Firebase Auth OK.");
-                form.addEventListener('submit', handleSubmit);
-            } catch (error) {
-                console.error("Erreur Firebase au démarrage :", error);
-                statusMessage.textContent = `Erreur de connexion Firebase: ${error.message}.`;
-                statusMessage.className = 'mt-4 p-3 text-center rounded-lg bg-red-100 text-red-700 block';
-                submitBtn.disabled = true;
-            }
+            }, 5000); // Défilement toutes les 5 secondes
         }
+        
+        document.addEventListener('DOMContentLoaded', startCarousel);
+        // --- FIN LOGIQUE DU CAROUSEL ---
 
-        // --- GESTION DE L'ENVOI DU FORMULAIRE ---
-        async function handleSubmit(event) {
-            event.preventDefault();
+        // --- LOGIQUE DU FORMULAIRE ---
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            errorMessage.style.display = 'none';
+            successModal.style.display = 'none';
 
-            // Afficher le chargement
-            submitBtn.disabled = true;
-            buttonText.classList.add('hidden');
-            loadingSpinner.classList.remove('hidden');
-            statusMessage.classList.add('hidden');
+            const nameInput = document.getElementById('name');
+            const messageInput = document.getElementById('message');
+            
+            const name = nameInput.value.trim();
+            const message = messageInput.value.trim();
 
-            const name = document.getElementById('name').value.trim() || "Anonyme";
-            const message = document.getElementById('message').value.trim();
-
-            if (message.length < 5) {
-                displayMessage("Veuillez écrire un message un peu plus long (min. 5 caractères).", 'bg-yellow-100', 'text-yellow-700');
-                resetButton();
+            if (name.length < 2 || message.length < 5) {
+                errorMessage.textContent = "Merci d’écrire un vrai prénom (min 2 caractères) et un message sincère (min 5 caractères) 💕";
+                errorMessage.style.display = 'block';
                 return;
             }
 
+            // Chemin de la collection Firestore (Doit correspondre à la règle)
+            const collectionPath = `artifacts/${appId}/public/data/testimonials`;
+
             try {
-                // Le chemin public correspondant aux règles Firestore
-                const collectionPath = `artifacts/${appId}/public/data/testimonials`;
-                
-                await addDoc(collection(db, collectionPath), {
+                // Utiliser le nom de la collection pour ajouter
+                await db.collection(collectionPath).add({
                     name: name,
                     message: message,
-                    timestamp: serverTimestamp() // Utilise le timestamp du serveur pour un tri précis
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
 
-                displayMessage("🎉 Votre souhait a été envoyé avec succès ! Il apparaît dans le Livre.", 'bg-green-100', 'text-green-700');
-                form.reset(); // Vider le formulaire après succès
+                // Succès : Afficher le modal
+                form.reset();
+                successModal.style.display = 'flex';
+                
             } catch (error) {
-                console.error("Erreur lors de l'envoi du message :", error);
-                displayMessage(`Erreur d'envoi. Cause probable: ${error.message}`, 'bg-red-100', 'text-red-700');
-            } finally {
-                resetButton();
+                console.error("Erreur lors de l'ajout du document: ", error);
+                errorMessage.textContent = `Désolé, une erreur s'est produite. Vérifiez vos règles Firebase. Erreur: ${error.message}`;
+                errorMessage.style.display = 'block';
             }
-        }
-
-        // --- FONCTIONS UTILITAIRES D'INTERFACE ---
-        function displayMessage(text, bgColor, textColor) {
-            statusMessage.textContent = text;
-            statusMessage.className = `mt-4 p-3 text-center rounded-lg ${bgColor} ${textColor} block`;
-        }
-
-        function resetButton() {
-            submitBtn.disabled = false;
-            buttonText.classList.remove('hidden');
-            loadingSpinner.classList.add('hidden');
-        }
-
-        document.addEventListener('DOMContentLoaded', authenticate);
+        });
     </script>
 </body>
 </html>
