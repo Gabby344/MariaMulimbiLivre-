@@ -28,7 +28,6 @@
   </script>
 
   <script type="module">
-    // ... LE CODE JAVASCRIPT FIREBASE EST LAISSÉ INTACT ICI ...
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js";
     import { getAuth, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js";
     import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js";
@@ -41,6 +40,21 @@
     // Initialisation et services
     let app, db, auth;
     const livre = document.getElementById('livre');
+
+    // 💖 LOGIQUE DU CARROUSEL (Déplacée et corrigée)
+    const totalBookImages = 3; 
+    let bookCurrentIndex = 0;
+
+    function startCarousel() {
+      const carousel = document.getElementById('bookCarousel');
+      if (carousel) {
+        setInterval(() => {
+          bookCurrentIndex = (bookCurrentIndex + 1) % totalBookImages;
+          const offset = -bookCurrentIndex * 100; 
+          carousel.style.transform = `translateX(${offset}%)`;
+        }, 6000); // Défilement toutes les 6 secondes
+      }
+    }
 
     // 1. Authentification Firebase
     async function authenticate() {
@@ -56,10 +70,11 @@
             }
             console.log("Firebase Auth et connexion OK.");
             loadTestimonials();
-            startCarousel(); // Démarrage du carrousel
+            startCarousel(); // Démarrage du carrousel après connexion
         } catch (error) {
             console.error("Erreur Firebase au démarrage :", error);
-            livre.innerHTML = "<p class='text-center text-red-600 mt-10 p-4 bg-white rounded-xl shadow-md'>⚠️ Erreur : Impossible de se connecter à la base de données.</p>";
+            // Afficher l'erreur à l'utilisateur
+            livre.innerHTML = "<p class='text-center text-red-600 mt-10 p-4 bg-white rounded-xl shadow-md'>⚠️ Erreur : Impossible de se connecter à la base de données. Assurez-vous que l'application est bien configurée ou que les règles de sécurité Firestore sont publiques.</p>";
         }
     }
 
@@ -129,26 +144,10 @@
         });
       }, (error) => {
         console.error("Erreur onSnapshot Firestore :", error);
-        livre.innerHTML = "<p class='text-center text-red-600 mt-10'>⚠️ Erreur : Problème de connexion en temps réel aux messages. Vérifiez les règles de sécurité.</p>";
+        // Afficher l'erreur à l'utilisateur
+        livre.innerHTML = "<p class='text-center text-red-600 mt-10 p-4 bg-white rounded-xl shadow-md'>⚠️ Erreur : Problème de connexion en temps réel aux messages. Vérifiez les règles de sécurité Firestore.</p>";
       });
     }
-    
-    // --- LOGIQUE DU CARROUSEL ---
-    const totalBookImages = 3; 
-    let bookCurrentIndex = 0;
-
-    function startCarousel() {
-      const carousel = document.getElementById('bookCarousel');
-      if (carousel) {
-        setInterval(() => {
-          bookCurrentIndex = (bookCurrentIndex + 1) % totalBookImages;
-          // Le track fait 300% de large (3 images * 100%)
-          const offset = -bookCurrentIndex * 100; 
-          carousel.style.transform = `translateX(${offset}%)`;
-        }, 6000); // Défilement toutes les 6 secondes
-      }
-    }
-    // --- FIN LOGIQUE DU CARROUSEL ---
 
 
     // Lancement de l'authentification et du chargement des données
@@ -193,37 +192,45 @@
       border-bottom: 2px dashed theme('colors.secondary-pink'); 
     }
 
-    /* --- NOUVEAUX STYLES POUR L'AFFICHAGE DES PHOTOS (CARROUSEL) --- */
+    /* --- STYLES CARROUSEL (INCHANGÉS) --- */
     .hero-carousel-container {
       position: relative;
-      height: 380px; /* Taille fixe pour le conteneur */
+      height: 380px; 
       margin-bottom: 40px;
-      overflow: hidden; /* Cacher les images qui débordent */
+      overflow: hidden; 
       border-radius: 10px;
       box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
     }
     .carousel-track {
         display: flex;
-        width: 300%; /* 3 images de 100% chacune */
+        width: 300%; 
         height: 100%;
-        transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Transition douce */
+        transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); 
     }
     .carousel-item {
-        width: 33.33%; /* Chaque item prend 1/3 de la piste (pour 3 photos) */
+        width: 33.33%; 
         flex-shrink: 0;
     }
     .carousel-item img {
       width: 100%;
       height: 100%;
-      object-fit: cover; /* Assure que l'image couvre bien la zone sans déformation */
+      object-fit: cover; 
       filter: brightness(95%);
     }
 
-    /* BOUTON D'IMPRESSION STYLÉ */
+    /* --- BOUTON D'IMPRESSION STYLÉ (AMÉLIORÉ) --- */
     .print-button {
+      /* Dégradé de couleur plus intense */
       background: linear-gradient(135deg, theme('colors.primary-wine'), theme('colors.secondary-pink'));
-      @apply inline-flex items-center px-10 py-3 rounded-xl text-white shadow-xl font-bold tracking-wider transition-all duration-300 transform hover:scale-[1.03];
-      box-shadow: 0 8px 20px theme('colors.primary-wine', 0.4);
+      @apply inline-flex items-center 
+             px-12 py-4 mt-8 
+             rounded-full text-white 
+             text-lg font-extrabold tracking-wider 
+             transition-all duration-300 transform 
+             hover:scale-[1.05] hover:shadow-2xl; /* Plus grand et plus visible */
+      
+      /* Ombre plus profonde */
+      box-shadow: 0 10px 30px rgba(138, 12, 79, 0.6); 
     }
     
     /* FOOTER */
@@ -250,7 +257,7 @@
         width: 100%;
         border: none;
       }
-      .print-button, footer, .hero-carousel-container { /* Changement ici */
+      .print-button, footer, .hero-carousel-container { 
         display: none !important; 
       }
       .testimonial {
@@ -290,14 +297,14 @@
 
     <div class="flex justify-center mt-12">
         <button onclick="window.print()" class="print-button">
-            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m0 0l2.585 2.585a2 2 0 002.828 0L17 17m0 0v-4a2 2 0 00-2-2h-4a2 2 0 00-2 2v4"></path></svg>
+            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m0 0l2.585 2.585a2 2 0 002.828 0L17 17m0 0v-4a2 2 0 00-2-2h-4a2 2 0 00-2 2v4"></path></svg>
             Imprimer ce livre d'or
         </button>
     </div>
   </main>
 
   <footer>
-    <p>— The gift of words - Gabby Umba, 2025 —</p>
+    <p>— Créé avec Amour par Gabby Umba, 2025 —</p>
   </footer>
 
 </body>
