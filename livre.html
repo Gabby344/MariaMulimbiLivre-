@@ -5,13 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Livre des Témoignages – Ruth Mulimbi</title>
 
-  <!-- Chargement de Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Polices élégantes : Playfair pour les titres, Merriweather pour le corps -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Merriweather:ital,wght@0,300;0,700;1,300;1,400&display=swap" rel="stylesheet">
   
-  <!-- Configuration Tailwind personnalisée pour la couleur primaire -->
   <script>
     tailwind.config = {
       theme: {
@@ -30,8 +27,8 @@
     }
   </script>
 
-  <!-- Firebase v9 Modules -->
   <script type="module">
+    // ... LE CODE JAVASCRIPT FIREBASE EST LAISSÉ INTACT ICI ...
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-app.js";
     import { getAuth, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js";
     import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js";
@@ -59,6 +56,7 @@
             }
             console.log("Firebase Auth et connexion OK.");
             loadTestimonials();
+            startCarousel(); // Démarrage du carrousel
         } catch (error) {
             console.error("Erreur Firebase au démarrage :", error);
             livre.innerHTML = "<p class='text-center text-red-600 mt-10 p-4 bg-white rounded-xl shadow-md'>⚠️ Erreur : Impossible de se connecter à la base de données.</p>";
@@ -117,15 +115,13 @@
             
             <p class="text-gray-700 whitespace-pre-line text-lg mb-4 font-serif leading-relaxed">${message}</p>
             
-            <!-- Bouton WhatsApp très discret -->
             <button 
               onclick="shareWhatsApp('${safeMessage}','${safeName}')" 
               class="absolute bottom-3 right-3 p-1.5 rounded-full bg-green-500 hover:bg-green-600 transition duration-200 shadow-md transform hover:scale-110 focus:outline-none"
               aria-label="Partager ce message sur WhatsApp"
             >
-              <!-- WhatsApp SVG Logo (très petit - w-4 h-4) -->
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="w-4 h-4">
-                <path d="M12.031 0C5.405 0 0 5.405 0 12.031c0 2.067.531 4.01 1.54 5.71l-.974 3.766 3.868-.973c1.676.953 3.593 1.458 5.497 1.458 6.626 0 12.031-5.405 12.031-12.031C24.062 5.405 18.657 0 12.031 0zm.006 3.018c5.08 0 9.018 3.939 9.018 9.018-.002 1.44-.337 2.84-.969 4.09l-.538 1.055-.47.93-.393.738-1.57 2.822-2.825-1.575-.74-.395-.93-.47-1.055-.537c-1.25.632-2.65.967-4.09.967-5.08 0-9.018-3.939-9.018-9.018s3.938-9.018 9.018-9.018zm.002 3.424c-3.134 0-5.748 2.536-5.748 5.67s2.614 5.67 5.748 5.67 5.748-2.536 5.748-5.67-2.614-5.67-5.748-5.67zm1.14 10.375s-.05.008-.103.008c-.28 0-.547-.034-.798-.094l-.23-.058-2.39-1.24c-.092-.047-.16-.096-.21-.15-.052-.057-.087-.13-.105-.205-.018-.073-.016-.16-.007-.266.007-.105.035-.202.083-.284l.056-.093c.092-.152.285-.357.558-.616.273-.26.54-.5.78-.713.24-.213.435-.41.593-.56.16-.15.286-.285.385-.41.097-.123.155-.224.18-.3.023-.076.02-.15-.01-.22-.03-.07-.087-.15-.17-.235-.083-.085-.183-.192-.298-.322-.116-.13-.23-.263-.34-.4-.112-.137-.197-.28-.258-.427-.06-.146-.088-.287-.088-.42.002-.137.03-.277.086-.42s.14-.29.256-.41.258-.266.44-.45.39-.33.616-.516c.225-.18.423-.33.593-.45.17-.118.318-.21.455-.27.136-.06.286-.09.45-.09.163 0 .317.03.46.09.145.06.28.14.41.25.13.11.23.23.31.36.08.13.126.27.14.4.015.132-.007.27-.064.41s-.137.28-.247.41-.22.25-.37.37-.306.23-.49.33-.36.19-.51.25-.26.1-.34.11zm-5.02-6.522c-.628 0-1.14.505-1.14 1.13s.512 1.13 1.14 1.13 1.14-.505 1.14-1.13-.512-1.13-1.14-1.13zm2.592 0c-.627 0-1.138.505-1.138 1.13s.51 1.13 1.138 1.13 1.138-.505 1.138-1.13-.51-1.13-1.138-1.13zm2.593 0c-.628 0-1.14.505-1.14 1.13s.512 1.13 1.14 1.13 1.14-.505 1.14-1.13-.512-1.13-1.14-1.13z"/>
+                <path d="M12.031 0C5.405 0 0 5.405 0 12.031c0 2.067.531 4.01 1.54 5.71l-.974 3.766 3.868-.973c1.676.953 3.593 1.458 5.497 1.458 6.626 0 12.031-5.405 12.031-12.031C24.062 5.405 18.657 0 12.031 0zm.006 3.018c5.08 0 9.018 3.939 9.018 9.018-.002 1.44-.337 2.84-.969 4.09l-.538 1.055-.47.93-.393.738-1.57 2.822-2.825-1.575-.74-.395-.93-.47-1.055-.537c-1.25.632-2.65.967-4.09.967-5.08 0-9.018-3.939-9.018-9.018s3.938-9.018 9.018-9.018zm.002 3.424c-3.134 0-5.748 2.536-5.748 5.67s2.614 5.67 5.748 5.67 5.748-2.536 5.748-5.67-2.614-5.67-5.748-5.67zm1.14 10.375s-.05.008-.103.008c-.28 0-.547-.034-.798-.094l-.23-.058-2.39-1.24c-.092-.047-.16-.096-.21-.15-.052-.057-.087-.13-.105-.205-.018-.073-.016-.16-.007-.266.007-.105.035-.202.083-.284l.056-.093c.092-.152.285-.357.558-.616.273-.26.54-.5.78-.713.24-.213.435-.41.593-.56.16-.15.286-.285.385-.41.097-.123.155-.224.18-.3.023-.076.02-.15-.01-.22-.03-.07-.087-.15-.17-.235-.083-.085-.183-.192-.298-.322-.116-.13-.23-.263-.34-.4-.112-.137-.197-.28-.258-.427-.06-.146-.088-.287-.088-.42.002-.137.03-.277.086-.42s.14-.29.256-.41.258-.266.44-.45.39-.33.616-.516c.225-.18.423-.33.593-.45.17-.118.318-.21.455-.27.136-.06.286-.09.45-.09.163 0 .317.03.46.09.145.06.28.14.41.25.13.11.23.23.31.36.08.13.126.27.14.4.015.132-.007.27-.064.41s-.137.28-.247.41-.22.25-.37.37-.306.23-.49.33-.36.19-.51.25-.26.1-.34.11zm-5.02-6.522c-.628 0-1.14.505-1.14 1.13s.512 1.13 1.14 1.13 1.14-.505 1.14-1.13-.512-1.13-1.14-1.13zm2.592 0c-.627 0-1.138.505-1.138 1.13s.51-1.13 1.138 1.13 1.138-.505 1.138-1.13-.51-1.13-1.138-1.13zm2.593 0c-.628 0-1.14.505-1.14 1.13s.512 1.13 1.14 1.13 1.14-.505 1.14-1.13-.512-1.13-1.14-1.13z"/>
               </svg>
             </button>
           `;
@@ -136,6 +132,24 @@
         livre.innerHTML = "<p class='text-center text-red-600 mt-10'>⚠️ Erreur : Problème de connexion en temps réel aux messages. Vérifiez les règles de sécurité.</p>";
       });
     }
+    
+    // --- LOGIQUE DU CARROUSEL ---
+    const totalBookImages = 3; 
+    let bookCurrentIndex = 0;
+
+    function startCarousel() {
+      const carousel = document.getElementById('bookCarousel');
+      if (carousel) {
+        setInterval(() => {
+          bookCurrentIndex = (bookCurrentIndex + 1) % totalBookImages;
+          // Le track fait 300% de large (3 images * 100%)
+          const offset = -bookCurrentIndex * 100; 
+          carousel.style.transform = `translateX(${offset}%)`;
+        }, 6000); // Défilement toutes les 6 secondes
+      }
+    }
+    // --- FIN LOGIQUE DU CARROUSEL ---
+
 
     // Lancement de l'authentification et du chargement des données
     document.addEventListener('DOMContentLoaded', authenticate);
@@ -179,20 +193,30 @@
       border-bottom: 2px dashed theme('colors.secondary-pink'); 
     }
 
-    /* --- IMAGE DE COUVERTURE --- */
-    .hero-image-container {
+    /* --- NOUVEAUX STYLES POUR L'AFFICHAGE DES PHOTOS (CARROUSEL) --- */
+    .hero-carousel-container {
       position: relative;
-      height: 350px;
+      height: 380px; /* Taille fixe pour le conteneur */
       margin-bottom: 40px;
+      overflow: hidden; /* Cacher les images qui débordent */
       border-radius: 10px;
-      overflow: hidden;
       box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
     }
-    .hero-image {
+    .carousel-track {
+        display: flex;
+        width: 300%; /* 3 images de 100% chacune */
+        height: 100%;
+        transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Transition douce */
+    }
+    .carousel-item {
+        width: 33.33%; /* Chaque item prend 1/3 de la piste (pour 3 photos) */
+        flex-shrink: 0;
+    }
+    .carousel-item img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      filter: brightness(90%) contrast(105%);
+      object-fit: cover; /* Assure que l'image couvre bien la zone sans déformation */
+      filter: brightness(95%);
     }
 
     /* BOUTON D'IMPRESSION STYLÉ */
@@ -226,7 +250,7 @@
         width: 100%;
         border: none;
       }
-      .print-button, footer, .hero-image-container { 
+      .print-button, footer, .hero-carousel-container { /* Changement ici */
         display: none !important; 
       }
       .testimonial {
@@ -246,21 +270,21 @@
 </head>
 
 <body>
-  <!-- Carrousel pour les 3 photos -->
-  <div class="hero-carousel-container">
-    <div class="carousel-track" id="bookCarousel">
-      <div class="carousel-item"><img src="book_photo1.JPG" alt="Ruth Mulimbi - Photo 1"></div>
-      <div class="carousel-item"><img src="book_photo2.JPG" alt="Ruth Mulimbi - Photo 2"></div>
-      <div class="carousel-item"><img src="book_photo3.JPG" alt="Ruth Mulimbi - Photo 3"></div>
+  <main>
+    <div class="hero-carousel-container">
+      <div class="carousel-track" id="bookCarousel">
+        <div class="carousel-item"><img src="book_photo1.JPG" alt="Ruth Mulimbi - Photo 1"></div>
+        <div class="carousel-item"><img src="book_photo2.JPG" alt="Ruth Mulimbi - Photo 2"></div>
+        <div class="carousel-item"><img src="book_photo3.JPG" alt="Ruth Mulimbi - Photo 3"></div>
+      </div>
     </div>
-  </div>
+
     <h1 class="text-4xl lg:text-5xl text-center mt-0 mb-2">Livre des Souhaits</h1>
     <div class="intro text-center pb-4 mb-10 text-xl italic font-serif">
         « Un bouquin d’amour et de bénédictions pour Ruth Mulimbi, célébrons la bonne personne qu'elle est. Joyeux Anniversaire Maria ! »
     </div>
 
     <div id="livre" class="space-y-6">
-      <!-- Les témoignages seront insérés ici par JavaScript -->
       <div class="text-center text-gray-400 p-8">Connexion et chargement des messages...</div>
     </div>
 
@@ -273,10 +297,8 @@
   </main>
 
   <footer>
-    <p>— Créé avec Amour par Gabby Umba, 2025 —</p>
+    <p>— The gift of words - Gabby Umba, 2025 —</p>
   </footer>
 
 </body>
 </html>
-
-
