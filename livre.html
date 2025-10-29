@@ -14,9 +14,9 @@
             theme: {
                 extend: {
                     colors: {
-                        'primary-wine': '#8a0c4f', /* Bordeaux Profond */
-                        'secondary-pink': '#d64d77', /* Rose doux pour l'accentuation */
-                        'bg-paper': '#fcfaf9', /* Beige très clair */
+                        'primary-wine': '#8a0c4f', 
+                        'secondary-pink': '#d64d77', 
+                        'bg-paper': '#fcfaf9', 
                     },
                     fontFamily: {
                         'serif': ['Merriweather', 'serif'],
@@ -93,23 +93,17 @@
 
         /* --- BOUTON D'IMPRESSION STYLÉ (AMÉLIORÉ et PROFESSIONNEL) --- */
         .print-button {
-            /* Dégradé de couleur audacieux */
             background: linear-gradient(135deg, theme('colors.primary-wine'), theme('colors.secondary-pink'));
-            
-            /* Utilisation des classes Tailwind pour la mise en forme et les effets */
             @apply inline-flex items-center 
                    px-12 py-4 mt-8 
                    rounded-full text-white 
                    text-lg font-extrabold tracking-wider 
                    transition-all duration-300 transform 
-                   hover:scale-[1.05] hover:shadow-2xl; /* Effet de zoom et d'ombre au survol */
-            
-            /* Ombre plus profonde et colorée pour un effet 3D professionnel */
+                   hover:scale-[1.05] hover:shadow-2xl; 
             box-shadow: 0 10px 30px rgba(138, 12, 79, 0.7); 
-            border: 2px solid rgba(255, 255, 255, 0.4); /* Bordure subtile pour le relief */
+            border: 2px solid rgba(255, 255, 255, 0.4); 
         }
 
-        /* Changement de couleur au survol pour un meilleur feedback */
         .print-button:hover {
             box-shadow: 0 15px 40px rgba(138, 12, 79, 0.8);
             background: linear-gradient(135deg, theme('colors.secondary-pink'), theme('colors.primary-wine'));
@@ -126,20 +120,9 @@
 
         /* MEDIA PRINT (Optimisation pour l'impression papier) */
         @media print {
-            body {
-                background: white; 
-                padding: 0;
-                margin: 0;
-            }
-            main {
-                box-shadow: none;
-                border-radius: 0;
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                border: none;
-            }
-            .print-button, footer, .hero-carousel-container { 
+            body { background: white; padding: 0; margin: 0; }
+            main { box-shadow: none; border-radius: 0; margin: 0; padding: 0; width: 100%; border: none; }
+            .print-button, footer, .hero-carousel-container, .whatsapp-share-button, .navigation-link { 
                 display: none !important; 
             }
             .testimonial {
@@ -150,14 +133,16 @@
                 padding: 15px;
                 border-left: 5px solid theme('colors.primary-wine') !important; 
             }
-            .testimonial button { 
-                display: none !important;
-            }
         }
         
         /* Style pour le message d'état */
         .status-message {
             @apply text-center text-lg mt-10 p-4 rounded-xl shadow-inner font-semibold;
+        }
+
+        /* Style pour le bouton WhatsApp */
+        .whatsapp-share-button {
+            @apply absolute bottom-3 right-3 p-1.5 rounded-full bg-green-500 hover:bg-green-600 transition duration-200 shadow-md transform hover:scale-110 focus:outline-none;
         }
     </style>
 </head>
@@ -170,8 +155,8 @@
                 <div class="carousel-item"><img src="https://placehold.co/800x380/d64d77/ffffff?text=Photo+1" alt="Ruth Mulimbi - Photo 1"></div>
                 <div class="carousel-item"><img src="https://placehold.co/800x380/8a0c4f/ffffff?text=Photo+2" alt="Ruth Mulimbi - Photo 2"></div>
                 <div class="carousel-item"><img src="https://placehold.co/800x380/d64d77/ffffff?text=Photo+3" alt="Ruth Mulimbi - Photo 3"></div>
-                <!-- Clone pour le défilement en boucle -->
-                <div class="carousel-item"><img src="https://placehold.co/800x380/d64d77/ffffff?text=Photo+1" alt="Ruth Mulimbi - Photo 1"></div>
+                <!-- CLONE OBLIGATOIRE pour la boucle infinie fluide -->
+                <div class="carousel-item"><img src="https://placehold.co/800x380/d64d77/ffffff?text=Photo+1" alt="Ruth Mulimbi - Photo 1 (Clone)"></div>
             </div>
         </div>
 
@@ -184,7 +169,10 @@
             <div id="loadingStatus" class="status-message text-gray-500 bg-gray-50">Connexion en cours et chargement des messages...</div>
         </div>
 
-        <div class="flex justify-center mt-12">
+        <div class="flex flex-col items-center mt-12 space-y-4">
+            <a href="index.html" class="navigation-link text-secondary-pink hover:text-primary-wine font-bold text-lg underline transition duration-200">
+                Ajouter mon propre souhait →
+            </a>
             <button onclick="window.print()" class="print-button">
                 <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m0 0l2.585 2.585a2 2 0 002.828 0L17 17m0 0v-4a2 2 0 00-2-2h-4a2 2 0 00-2 2v4"></path></svg>
                 Imprimer ce livre d'or
@@ -201,60 +189,73 @@
         import { getAuth, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-auth.js";
         import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore.js";
 
-        // Variables globales du Canvas
+        // --- GESTION DES CONFIGURATIONS CANVAS / FIREBASE ---
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
-            apiKey: "AIzaSyAhPwoUbZT-ui8YZCl7747-hOWrXpglhvM",
-            authDomain: "lwangagestion.firebaseapp.com",
-            projectId: "lwangagestion",
-            storageBucket: "lwangagestion.firebasestorage.app",
-            messagingSenderId: "1052448880149",
-            appId: "1:1052448880149:web:74761213a03bc53770801c"
-        };
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        
+        let firebaseConfig = null;
+        try {
+            // Tente de récupérer la configuration fournie par la plateforme
+            firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+            if (!firebaseConfig) {
+                 // Fallback explicite pour le développement local si les variables Canvas sont absentes
+                 console.warn("Variables Canvas Firebase non définies. Si vous exécutez en local, veuillez définir firebaseConfig manuellement.");
+            }
+        } catch (e) {
+            console.error("Erreur de parsing de __firebase_config:", e);
+        }
 
         // Références aux éléments du DOM
         const livre = document.getElementById('livre');
         const loadingStatus = document.getElementById('loadingStatus');
 
-        // Initialisation et services
         let db, auth;
 
-        // --- LOGIQUE DU CARROUSEL ---
+        // --- LOGIQUE DU CARROUSEL CORRIGÉE ---
         const totalBookImages = 3; 
         const bookCarousel = document.getElementById('bookCarousel');
         let bookCurrentIndex = 0;
-        const bookSlideWidth = 100 / (totalBookImages + 1); // Pourcentage de largeur de chaque élément (4 au total: 3 + 1 clone)
-        const bookTransitionDuration = 1200; // Doit correspondre au CSS
+        const bookSlideWidth = 100 / (totalBookImages + 1); 
+        const bookTransitionDuration = 1200; 
 
         function startCarousel() {
             if (!bookCarousel) return;
 
+            // Démarre l'intervalle de défilement
             setInterval(() => {
                 bookCurrentIndex++;
                 const offset = -bookCurrentIndex * bookSlideWidth; 
+                
+                // 1. Appliquer la transition pour le mouvement visible
                 bookCarousel.style.transition = `transform ${bookTransitionDuration / 1000}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
                 bookCarousel.style.transform = `translateX(${offset}%)`;
 
-                // Lorsque l'on arrive sur le clone
-                if (bookCurrentIndex >= totalBookImages) {
+                // 2. Si on est sur le clone (index 3), revenir à la position de départ (index 0) après la transition
+                if (bookCurrentIndex === totalBookImages) { 
                     setTimeout(() => {
-                        // Réinitialiser la position à la première image sans transition
+                        // Supprimer la transition pour un saut instantané
                         bookCarousel.style.transition = 'none';
                         bookCurrentIndex = 0;
                         bookCarousel.style.transform = 'translateX(0)';
-                    }, bookTransitionDuration); // Attendre que la transition vers le clone soit terminée
+                    }, bookTransitionDuration); // Attendre que le mouvement vers le clone soit terminé
                 }
-            }, 6000); // Défilement toutes les 6 secondes
+            }, 6000); 
         }
 
         // --- AUTHENTIFICATION ET INITIALISATION FIREBASE ---
         async function authenticate() {
+            if (!firebaseConfig) {
+                loadingStatus.textContent = `🚫 ERREUR : Configuration Firebase non trouvée. Impossible de charger les messages.`;
+                loadingStatus.className = 'status-message text-red-600 bg-red-100 border border-red-300';
+                return;
+            }
+
             try {
                 const app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
                 auth = getAuth(app);
                 
+                // Connexion de l'utilisateur avec le token si disponible, sinon anonymement
                 if (initialAuthToken) {
                     await signInWithCustomToken(auth, initialAuthToken);
                 } else {
@@ -262,51 +263,41 @@
                 }
                 
                 console.log("Firebase Auth et connexion OK.");
-                loadTestimonials(); // Démarrer le chargement des données
-                startCarousel(); // Démarrer le carrousel
+                loadTestimonials(); 
+                startCarousel(); 
             } catch (error) {
                 console.error("Erreur Firebase au démarrage :", error);
-                loadingStatus.textContent = `🚫 ERREUR FATALE DE CONNEXION : ${error.message}. Vérifiez votre configuration Firebase et vos règles de sécurité.`;
+                loadingStatus.textContent = `🚫 ERREUR FATALE DE CONNEXION : ${error.message}.`;
                 loadingStatus.className = 'status-message text-red-600 bg-red-100 border border-red-300';
             }
         }
 
         // --- FONCTION UTILITAIRE DE PARTAGE WHATSAPP ---
         window.shareWhatsApp = (message, sender) => {
-            // Nettoyage et formatage du message pour l'URL
             const cleanMessage = message.trim();
             const formattedMessage = `Un beau message pour Ruth Mulimbi de la part de *${sender}* :\n\n"${cleanMessage}"\n\n(Livre des Souhaits : ${window.location.href})`;
             const encoded = encodeURIComponent(formattedMessage);
             
-            // Ouvre WhatsApp Web/App
             window.open(`https://wa.me/?text=${encoded}`, '_blank');
         };
 
         // --- CHARGEMENT DES TÉMOIGNAGES (Real-time via onSnapshot) ---
         function loadTestimonials() {
-            // Chemin d'accès public MANDATOIRE pour le partage
             const collectionPath = `artifacts/${appId}/public/data/testimonials`;
             const testimonialsRef = collection(db, collectionPath);
             
-            // Tri du plus récent au plus ancien
-            // NOTE: Pour éviter les erreurs d'index, le tri se fera en JS si on utilise des champs non-indexés
-            // Cependant, le 'timestamp' est généralement indexé.
+            // Tri par timestamp descendant (le plus récent en premier)
             const q = query(testimonialsRef, orderBy("timestamp", "desc"));
 
-            // Écoute en temps réel
             onSnapshot(q, (snapshot) => {
                 
-                const messagesExist = !snapshot.empty;
-
-                // Cacher ou supprimer le message de chargement/statut
                 if (loadingStatus) {
                     loadingStatus.remove();
                 }
 
-                livre.innerHTML = ''; // Nettoyer avant d'insérer
+                livre.innerHTML = ''; 
 
-                if (!messagesExist) {
-                    // Afficher un message si la liste est vide
+                if (snapshot.empty) {
                     const emptyMessage = document.createElement('p');
                     emptyMessage.className = 'status-message text-gray-500 bg-gray-50 italic border border-gray-200';
                     emptyMessage.textContent = 'Aucun témoignage n’a encore été ajouté. Soyez le premier à laisser votre mot !';
@@ -319,11 +310,10 @@
                     const name = data.name || "Un admirateur Anonyme";
                     const message = data.message || "Un beau souhait !";
                     
-                    // Formatter la date (Gestion des timestamps Firestore ou Date Javascript)
                     const timestamp = data.timestamp && data.timestamp.toDate ? data.timestamp.toDate() : new Date();
                     const date = timestamp.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
                     
-                    // Sécuriser les chaînes de caractères pour l'appel JS
+                    // Sécuriser les chaînes pour l'appel JS
                     const safeMessage = message.replace(/'/g, "\\'").replace(/"/g, '\\"');
                     const safeName = name.replace(/'/g, "\\'").replace(/"/g, '\\"');
 
@@ -335,12 +325,11 @@
                             <small class="text-gray-500 italic text-sm mt-1">${date}</small>
                         </div>
                         
-                        <!-- whitespace-pre-line MAINTIENT LES RETOURS À LA LIGNE ÉCRITS PAR L'UTILISATEUR -->
                         <p class="text-gray-700 whitespace-pre-line text-lg mb-4 font-serif leading-relaxed">${message}</p>
                         
                         <button 
                             onclick="shareWhatsApp('${safeMessage}','${safeName}')" 
-                            class="absolute bottom-3 right-3 p-1.5 rounded-full bg-green-500 hover:bg-green-600 transition duration-200 shadow-md transform hover:scale-110 focus:outline-none"
+                            class="whatsapp-share-button"
                             aria-label="Partager ce message sur WhatsApp"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="w-4 h-4">
@@ -351,12 +340,11 @@
                     livre.appendChild(div);
                 });
             }, (error) => {
-                // Gestion explicite des erreurs d'accès/permission
-                console.error("Erreur onSnapshot Firestore (Permissions) :", error);
+                console.error("Erreur onSnapshot Firestore :", error);
                 livre.innerHTML = '';
                 const errorMessage = document.createElement('p');
-                errorMessage.className = 'status-message text-red-600 bg-red-100 border border-red-300';
-                errorMessage.textContent = `🚫 Erreur de chargement. La lecture des messages a échoué. Cause probable : les règles de sécurité Firestore n'autorisent pas la lecture ('allow list: if true;').`;
+                errorMessage.className = 'status-message text-red-600 bg-red-100 bg-red-100 border border-red-300';
+                errorMessage.textContent = `🚫 Échec de la lecture : Vérifiez vos règles de sécurité Firestore.`;
                 livre.appendChild(errorMessage);
             });
         }
