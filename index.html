@@ -7,8 +7,9 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Merriweather:wght=300;400;700&family=Sacramento&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Merriweather:wght@300;400;700&family=Sacramento&display=swap" rel="stylesheet">
 
+    <!-- Firebase Compat v9 pour la compatibilité avec l'environnement -->
     <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore-compat.js"></script>
 
@@ -20,7 +21,6 @@
             --fond: #fffcf8; /* Blanc cassé doux */
             --fond-secondaire: #ffe4e9; /* Rose très pâle pour le dégradé */
             --texte: #3c3c3c;
-            --shadow-soft: 0 6px 15px rgba(0, 0, 0, 0.1);
         }
 
         body {
@@ -48,14 +48,13 @@
             overflow: hidden;
             max-height: 500px;
             width: 100%;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Ombre plus marquée */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); 
         }
         
-        /* Ajustement du carousel pour la boucle infinie (ajout d'une image "fantôme") */
+        /* CORRECTION CAROUSEL CSS: 9 éléments (8+1 clone) * 100% = 900% */
         .carousel {
             display: flex;
-            /* Le nombre d'images plus une pour la transition en boucle */
-            width: calc(100% * 9 / 8); /* (8 images + 1 image fantôme) / 8 */
+            width: 900%; 
             transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             max-height: 500px;
         }
@@ -69,7 +68,7 @@
             width: 100%;
             height: 500px;
             object-fit: cover;
-            filter: brightness(75%); /* Laisse le texte ressortir */
+            filter: brightness(75%); 
         }
 
         .hero-text {
@@ -83,25 +82,14 @@
             background: rgba(0, 0, 0, 0.1); 
             padding: 30px 60px;
             border-radius: 20px;
-            backdrop-filter: blur(4px); /* Flou augmenté pour un effet premium */
+            backdrop-filter: blur(4px); 
             z-index: 10;
             border: 2px solid rgba(255, 255, 255, 0.6);
             text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
         }
 
-        .hero-text h1 {
-            font-size: 55px; /* Très grand pour l'impact */
-            margin-bottom: 10px;
-            color: #fff;
-            font-weight: 700;
-            letter-spacing: 3px;
-        }
-
-        .hero-text p {
-            font-size: 26px;
-            font-family: 'Sacramento', cursive; 
-            color: #fff;
-        }
+        .hero-text h1 { font-size: 55px; margin-bottom: 10px; color: #fff; font-weight: 700; letter-spacing: 3px; }
+        .hero-text p { font-size: 26px; font-family: 'Sacramento', cursive; color: #fff; }
 
         /* --- TITRES et INTRODUCTION --- */
         h1:not(.hero-text h1) {
@@ -112,161 +100,48 @@
             letter-spacing: 1px;
         }
 
-        p {
-            font-size: 1.1em;
-            color: #555;
-        }
+        p { font-size: 1.1em; color: #555; }
 
         /* --- FORMULAIRE DESIGN --- */
-        form {
-            margin: 40px auto;
-            max-width: 650px;
-            background: #fff;
-            padding: 35px;
-            border-radius: 16px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); /* Ombre plus douce et large */
-            text-align: left;
-            border-left: 8px solid var(--rose); /* Bordure plus épaisse */
-        }
+        form { margin: 40px auto; max-width: 650px; background: #fff; padding: 35px; border-radius: 16px; box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); text-align: left; border-left: 8px solid var(--rose); }
+        input, textarea { width: 100%; padding: 15px; margin: 10px 0 20px 0; border-radius: 10px; border: 1px solid #dcdcdc; font-size: 1em; transition: border-color 0.3s, box-shadow 0.3s; resize: vertical; }
+        input:focus, textarea:focus { outline: none; border-color: var(--rose); box-shadow: 0 0 8px rgba(214, 77, 119, 0.5); }
+        #testimonialForm button[type="submit"] { padding: 12px 25px; background: linear-gradient(145deg, var(--rose), var(--rose-fonce)); font-size: 1.1em; color: white; border: none; border-radius: 10px; cursor: pointer; transition: all 0.3s; font-weight: 700; box-shadow: 0 4px 10px rgba(168, 46, 86, 0.4); }
+        #testimonialForm button[type="submit"]:hover { transform: translateY(-2px) scale(1.01); box-shadow: 0 6px 15px rgba(168, 46, 86, 0.6); }
 
-        input, textarea {
-            width: 100%;
-            padding: 15px;
-            margin: 10px 0 20px 0;
-            border-radius: 10px;
-            border: 1px solid #dcdcdc; /* Ligne plus claire */
-            font-size: 1em;
-            transition: border-color 0.3s, box-shadow 0.3s;
-            resize: vertical;
-        }
-
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: var(--rose);
-            box-shadow: 0 0 8px rgba(214, 77, 119, 0.5); /* Ombre plus visible */
-        }
-
-        /* Bouton d'envoi */
-        #testimonialForm button[type="submit"] {
-            padding: 12px 25px;
-            background: linear-gradient(145deg, var(--rose), var(--rose-fonce)); /* Dégradé */
-            font-size: 1.1em;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 700;
-            box-shadow: 0 4px 10px rgba(168, 46, 86, 0.4);
-        }
-
-        #testimonialForm button[type="submit"]:hover {
-            transform: translateY(-2px) scale(1.01);
-            box-shadow: 0 6px 15px rgba(168, 46, 86, 0.6);
-        }
-
-        /* --- STYLE DU BOUTON "VOIR LE LIVRE" (MODIFIÉ) --- */
+        /* --- STYLE DU BOUTON "VOIR LE LIVRE" --- */
         .book-button {
-            /* Styles de base et agrandissement */
             @apply inline-flex items-center justify-center 
-                   px-10 py-4 mt-8 mb-16 /* Agrandissement du padding */
-                   text-xl font-extrabold text-white /* Agrandissement et gras */
+                   px-10 py-4 mt-8 mb-16
+                   text-xl font-extrabold text-white
                    rounded-full 
-                   shadow-2xl hover:shadow-xl hover:scale-[1.05] /* Effet plus prononcé */
+                   shadow-2xl hover:shadow-xl hover:scale-[1.05]
                    transition-all duration-300 ease-out;
 
-            /* Couleurs personnalisées (Dégradé plus visible) */
             background-color: var(--rose-fonce);
             background-image: linear-gradient(45deg, var(--rose-fonce), var(--rose));
             
-            /* Effet de lueur et relief */
-            box-shadow: 0 10px 30px rgba(168, 46, 86, 0.7), /* Ombre principale */
-                        0 0 0 3px rgba(255, 255, 255, 0.5); /* Bordure de lueur blanche */
-            border: none; /* Supprime toute bordure par défaut */
+            box-shadow: 0 10px 30px rgba(168, 46, 86, 0.7), 0 0 0 3px rgba(255, 255, 255, 0.5);
+            border: none;
             letter-spacing: 1px;
             text-transform: uppercase;
         }
 
-        .book-button:hover {
-            box-shadow: 0 12px 35px rgba(168, 46, 86, 0.9); /* Ombre encore plus intense au survol */
-        }
+        .book-button:hover { box-shadow: 0 12px 35px rgba(168, 46, 86, 0.9); }
 
-
-        /* --- FOOTER SIMPLIFIÉ --- */
-        footer {
-            margin-top: auto; /* Pousse le footer vers le bas */
-            margin-bottom: 30px;
-            padding-top: 20px;
-            font-size: 0.9em;
-            color: #aaa;
-        }
+        /* --- FOOTER SIMPLIFIÉ & RESPONSIVE --- */
+        footer { margin-top: auto; margin-bottom: 30px; padding-top: 20px; font-size: 0.9em; color: #aaa; }
+        .signature { font-family: 'Merriweather', serif; font-size: 1em; color: #888; font-weight: 300; display: inline; margin-right: 5px; }
+        .separator { color: #ccc; }
         
-        .signature {
-            font-family: 'Merriweather', serif; /* Simplicité, pas de manuscrit ici */
-            font-size: 1em;
-            color: #888;
-            font-weight: 300;
-            display: inline;
-            margin-right: 5px;
-        }
-        .separator {
-            color: #ccc;
-        }
-
-        /* --- MODAL DE CONFIRMATION (Tailwind) --- */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: none; /* Caché par défaut */
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            backdrop-filter: blur(5px);
-        }
-
-        .modal-content {
-            background-color: white;
-            padding: 30px 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            max-width: 90%;
-            animation: scaleIn 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-            text-align: center;
-        }
-
-        @keyframes scaleIn {
-            from { transform: scale(0.7); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-
-        /* Message d'erreur personnalisé dans le formulaire */
-        #errorMessage {
-            color: #e3342f; /* Rouge vif */
-            background-color: #fcebeb; /* Fond très pâle */
-            border: 1px solid #f9d8d8;
-            padding: 8px;
-            border-radius: 8px;
-            margin-top: -10px;
-            margin-bottom: 20px;
-            font-size: 0.9em;
-            font-weight: 500;
-            display: none;
-            animation: slideDown 0.3s ease-out;
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        /* Modals & Erreur */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: none; align-items: center; justify-content: center; z-index: 100; backdrop-filter: blur(5px); }
+        .modal-content { background-color: white; padding: 30px 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3); max-width: 90%; animation: scaleIn 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55); text-align: center; }
+        @keyframes scaleIn { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        #errorMessage { color: #e3342f; background-color: #fcebeb; border: 1px solid #f9d8d8; padding: 8px; border-radius: 8px; margin-top: -10px; margin-bottom: 20px; font-size: 0.9em; font-weight: 500; display: none; }
 
         @media (max-width: 600px) {
-            .hero-text {
-                padding: 15px 25px;
-            }
+            .hero-text { padding: 15px 25px; }
             .hero-text h1 { font-size: 40px; }
             .hero-text p { font-size: 20px; }
             form { width: 90%; }
@@ -274,13 +149,7 @@
             h1:not(.hero-text h1) { margin-top: 30px; font-size: 2em; }
         }
 
-        /* Style spécifique pour la section Contact corrigée */
-        .contact-info-item {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px;
-        }
+        .contact-info-item { display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
     </style>
 </head>
 
@@ -297,6 +166,7 @@
                 <div class="carousel-item"><img src="photo6.JPG" alt="Ruth Mulimbi - Photo 6" class="hero-img"></div>
                 <div class="carousel-item"><img src="photo7.JPG" alt="Ruth Mulimbi - Photo 7" class="hero-img"></div>
                 <div class="carousel-item"><img src="photo8.JPG" alt="Ruth Mulimbi - Photo 8" class="hero-img"></div>
+                <!-- CLONE DE LA PREMIÈRE IMAGE POUR LA BOUCLE INFINIE -->
                 <div class="carousel-item" id="firstClone"><img src="photo1.JPG" alt="Ruth Mulimbi - Photo 1" class="hero-img"></div>
             </div>
             
@@ -376,13 +246,12 @@
 
     <script>
         // Variables globales fournies par l'environnement Canvas
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'lwangagestion';
         
-        // Utilisation de la configuration Firebase dynamique si elle est disponible
+        // VOS CLÉS FIREBASE INTÉGRÉES ICI
         const firebaseConfig = typeof __firebase_config !== 'undefined' 
             ? JSON.parse(__firebase_config) 
             : {
-                // Configuration de secours si non disponible
                 apiKey: "AIzaSyAhPwoUbZT-ui8YZCl7747-hOWrXpglhvM",
                 authDomain: "lwangagestion.firebaseapp.com",
                 projectId: "lwangagestion",
@@ -402,31 +271,28 @@
         const carousel = document.getElementById('heroCarousel');
         const totalImages = 8; 
         let currentIndex = 0;
-        const transitionDuration = 1200; // Durée de la transition CSS en ms
+        const transitionDuration = 1200; 
 
-        // --- LOGIQUE DU CAROUSEL (Mise à jour pour un défilement en boucle) ---
+        // --- LOGIQUE DU CAROUSEL (Défilement en boucle corrigé) ---
         function startCarousel() {
             if (!carousel) return;
 
-            // La largeur totale de l'ensemble des images (8 réelles + 1 clone)
-            const slideWidth = 100 / (totalImages + 1);
-
-            // Démarre le défilement
+            const slideWidth = 100 / (totalImages + 1); // 100 / 9
+            
             setInterval(() => {
                 currentIndex++;
-                // Calcul du décalage en pourcentage (décalage de -slideWidth * currentIndex)
                 const offset = -currentIndex * slideWidth; 
                 carousel.style.transition = `transform ${transitionDuration / 1000}s cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
                 carousel.style.transform = `translateX(${offset}%)`;
 
-                // Lorsque l'on arrive sur l'image "fantôme" (le clone de la première)
+                // Logique de bouclage après être arrivé sur le clone
                 if (currentIndex >= totalImages) {
                     setTimeout(() => {
                         // Réinitialiser la position à la première image sans transition
                         carousel.style.transition = 'none';
                         currentIndex = 0;
                         carousel.style.transform = 'translateX(0)';
-                    }, transitionDuration); // Attend que la transition vers le clone soit terminée
+                    }, transitionDuration); 
                 }
             }, 5000); // Défilement toutes les 5 secondes
         }
@@ -438,7 +304,6 @@
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            // Réinitialiser les messages d'erreur et de succès
             errorMessage.style.display = 'none';
             successModal.style.display = 'none';
 
@@ -449,20 +314,20 @@
             const message = messageInput.value.trim();
 
             if (name.length < 2 || message.length < 5) {
-                // Affichage du message d'erreur stylisé (remplacement de l'alert)
                 errorMessage.textContent = "Merci d’écrire un vrai prénom (min 2 caractères) et un message sincère (min 5 caractères) 💕";
                 errorMessage.style.display = 'block';
                 return;
             }
 
-            // Chemin de la collection Firestore (dans l'espace public de l'application)
+            // Chemin de la collection Firestore (Doit correspondre à la règle)
             const collectionPath = `artifacts/${appId}/public/data/testimonials`;
 
             try {
+                // Utiliser le nom de la collection pour ajouter
                 await db.collection(collectionPath).add({
                     name: name,
                     message: message,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp() // Utilisation du timestamp serveur
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
 
                 // Succès : Afficher le modal
@@ -471,17 +336,12 @@
                 
             } catch (error) {
                 console.error("Erreur lors de l'ajout du document: ", error);
-                errorMessage.textContent = "Désolé, une erreur s'est produite lors de l'envoi de votre message. Veuillez réessayer.";
+                errorMessage.textContent = `Désolé, une erreur s'est produite. Vérifiez vos règles Firebase. Erreur: ${error.message}`;
                 errorMessage.style.display = 'block';
             }
         });
-
-        // --- LOGIQUE D'ERREUR PERSONNALISÉE ---
-        function showCustomError(msg) {
-            errorMessage.textContent = msg;
-            errorMessage.style.display = 'block';
-        }
-
     </script>
 </body>
 </html>
+
+
