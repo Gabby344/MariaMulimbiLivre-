@@ -10,13 +10,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Merriweather:ital,wght@0,300;0,700;1,300;1,400&family=Sacramento&display=swap" rel="stylesheet">
     
     <script>
+        // Configuration Tailwind pour harmoniser les couleurs avec index.html
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'primary-wine': '#8a0c4f', /* Bordeaux Profond (Rose-Foncé) */
-                        'secondary-pink': '#d64d77', /* Rose doux pour l'accentuation (Rose) */
-                        'bg-paper': '#fffcf8', /* Fond clair (Fond) */
+                        'primary-wine': '#8a0c4f',      /* Bordeaux Profond */
+                        'secondary-pink': '#e990b0',    /* Rose doux (Ajusté) */
+                        'bg-paper': '#fffcf8',          /* Fond clair (Ajusté) */
                     },
                     fontFamily: {
                         'serif': ['Merriweather', 'serif'],
@@ -29,6 +30,7 @@
     </script>
 
     <script type="module">
+        // Importation des modules Firebase modernes
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, query, orderBy, onSnapshot, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
@@ -52,7 +54,6 @@
         const livre = document.getElementById('livre');
 
         // 💖 LOGIQUE DU CARROUSEL (Corrigée pour être en boucle fluide)
-        // Note: 3 images nommées book_photo1.JPG à book_photo3.JPG
         const totalBookImages = 3; 
         const bookCarousel = document.getElementById('bookCarousel');
         let bookCurrentIndex = 0;
@@ -67,14 +68,11 @@
                 bookCurrentIndex++;
                 const offset = -bookCurrentIndex * bookSlideWidth; 
                 
-                // Appliquer la transition pour le défilement normal
                 bookCarousel.style.transition = `transform ${bookTransitionDuration / 1000}s cubic-bezier(0.42, 0, 0.58, 1)`;
                 bookCarousel.style.transform = `translateX(${offset}%)`;
 
-                // Lorsque l'on arrive sur le clone
                 if (bookCurrentIndex >= totalBookImages) {
                     setTimeout(() => {
-                        // Réinitialiser la position à la première image sans transition
                         bookCarousel.style.transition = 'none';
                         bookCurrentIndex = 0;
                         bookCarousel.style.transform = 'translateX(0)';
@@ -109,7 +107,8 @@
             const cleanMessage = message.trim();
             const formattedMessage = `Un beau message pour Ruth Mulimbi de la part de *${sender}* : \n\n"${cleanMessage}"\n\n(Livre des Souhaits : ${window.location.href})`;
             const encoded = encodeURIComponent(formattedMessage);
-            window.open(`https://wa.me/?text=${encoded}`, '_blank');
+            // Utilisation d'une API de partage plus générique pour éviter les problèmes de blocage
+            window.open(`https://api.whatsapp.com/send?text=${encoded}`, '_blank');
         };
 
         // 3. Chargement et affichage des témoignages (Real-time via onSnapshot)
@@ -117,6 +116,7 @@
             const collectionPath = `artifacts/${appId}/public/data/testimonials`;
             const testimonialsRef = collection(db, collectionPath);
             
+            // Ordonner par date la plus récente
             const q = query(testimonialsRef, orderBy("timestamp", "desc"));
 
             onSnapshot(q, (snapshot) => {
@@ -134,19 +134,20 @@
                     const timestamp = data.timestamp ? data.timestamp.toDate() : new Date();
                     const date = timestamp.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
                     
-                    // Sécuriser les chaînes de caractères
+                    // Sécuriser les chaînes de caractères pour l'appel JS
                     const safeMessage = message.replace(/'/g, "\\'").replace(/"/g, '\\"');
                     const safeName = name.replace(/'/g, "\\'").replace(/"/g, '\\"');
 
                     const div = document.createElement('div');
-                    div.className = 'testimonial bg-white p-6 md:p-8 mb-6 rounded-xl shadow-lg relative border-l-4 border-primary-wine/70 hover:shadow-xl transition-all duration-300';
+                    // Style de carte amélioré pour l'élégance
+                    div.className = 'testimonial bg-white p-7 md:p-10 mb-8 rounded-2xl shadow-xl relative border-l-8 border-secondary-pink/70 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-0.5';
                     div.innerHTML = `
-                        <div class="testimonial-header flex justify-between items-start mb-4 border-b border-gray-100 pb-2">
-                            <strong class="text-xl font-display font-bold text-primary-wine">${name}</strong>
-                            <small class="text-gray-500 italic text-sm mt-1">${date}</small>
+                        <div class="testimonial-header flex justify-between items-start mb-4 border-b border-primary-wine/30 pb-3">
+                            <strong class="text-2xl font-display font-bold text-primary-wine">${name}</strong>
+                            <small class="text-gray-500 italic text-sm mt-1">Écrit le ${date}</small>
                         </div>
                         
-                        <p class="text-gray-700 whitespace-pre-line text-lg mb-4 font-serif leading-relaxed">${message}</p>
+                        <p class="text-gray-700 whitespace-pre-line text-lg mb-4 font-serif leading-relaxed italic border-l-4 border-gray-100 pl-4">“${message}”</p>
                         
                         <button 
                             onclick="shareWhatsApp('${safeMessage}','${safeName}')" 
@@ -183,45 +184,45 @@
         
         main {
             flex-grow: 1;
-            max-width: 900px;
-            margin: 30px auto;
+            max-width: 1000px; /* Augmenté pour aérer l'ensemble */
+            margin: 40px auto;
             width: 95%;
-            padding: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15); 
-            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2); 
+            border-radius: 20px;
             background-color: white; 
-            border: 1px solid theme('colors.gray.100');
+            border-top: 5px solid theme('colors.primary-wine');
         }
 
         /* TYPOGRAPHIE ET TITRES */
         h1 {
             font-family: 'Playfair Display', serif;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
         }
 
         .intro {
-            font-family: 'Sacramento', cursive; /* Utilisation de la police Script pour un style élégant */
+            font-family: 'Sacramento', cursive; 
             color: theme('colors.primary-wine');
-            border-bottom: 2px dashed theme('colors.secondary-pink'); 
-            font-size: 1.8rem;
+            /* Bordure plus subtile */
+            border-bottom: 2px solid theme('colors.secondary-pink'); 
+            font-size: 2.2rem; /* Plus grand */
             line-height: 1.4;
+            padding-bottom: 10px;
         }
 
         /* --- STYLES CARROUSEL --- */
         .hero-carousel-container {
             position: relative;
-            height: 380px; 
-            margin-bottom: 40px;
+            height: 450px; /* Plus haut */
+            margin-bottom: 50px;
             overflow: hidden; 
-            border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
         }
         .carousel-track {
             display: flex;
-            /* 3 images + 1 clone = 4 éléments. Largeur = 400% */
             width: 400%; 
             height: 100%;
-            /* La transition est gérée par JS (voir ci-dessus) */
         }
         .carousel-item {
             width: 25%; 
@@ -231,16 +232,16 @@
             width: 100%;
             height: 100%;
             object-fit: cover; 
-            filter: brightness(95%);
+            filter: brightness(90%);
         }
 
         /* --- BOUTONS D'ACTION STYLÉS (Imprimer et Retour) --- */
         .action-button {
             /* Utilisation des classes Tailwind pour la mise en forme et les effets */
             @apply inline-flex items-center 
-                   px-6 py-3 
+                   px-8 py-3 
                    rounded-full text-white 
-                   text-lg font-bold tracking-wider 
+                   text-xl font-bold tracking-wider 
                    transition-all duration-300 transform 
                    hover:scale-[1.05] hover:shadow-xl focus:outline-none; 
         }
@@ -251,62 +252,49 @@
             box-shadow: 0 8px 25px rgba(138, 12, 79, 0.6); 
         }
         .print-button:hover {
-            background: linear-gradient(135deg, theme('colors.secondary-pink'), theme('colors.primary-wine'));
             box-shadow: 0 12px 30px rgba(138, 12, 79, 0.8);
         }
 
         /* Bouton Retour: Rose Clair/Rose Vif */
         .back-button {
-            background: linear-gradient(135deg, theme('colors.secondary-pink'), theme('colors.secondary-pink'));
+            background: linear-gradient(135deg, theme('colors.secondary-pink'), theme('colors.primary-wine'));
             color: white;
-            box-shadow: 0 8px 20px rgba(214, 77, 119, 0.5); 
+            box-shadow: 0 8px 20px rgba(233, 144, 176, 0.7); 
+            border: 2px solid white; /* Petite bordure pour le relief */
         }
         .back-button:hover {
-            background: theme('colors.secondary-pink');
-            box-shadow: 0 10px 25px rgba(214, 77, 119, 0.7);
+            background: theme('colors.primary-wine');
+            box-shadow: 0 10px 25px rgba(233, 144, 176, 0.9);
         }
 
         /* Bouton Partage WhatsApp sur chaque message */
         .whatsapp-share-button {
-            @apply absolute bottom-3 right-3 p-2 rounded-full 
+            @apply absolute bottom-4 right-4 p-3 rounded-full /* Plus grand */
                    bg-green-500 hover:bg-green-600 
-                   transition duration-200 shadow-md 
+                   transition duration-200 shadow-lg 
                    transform hover:scale-110 focus:outline-none;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 45px;
+            height: 45px;
         }
 
         /* MEDIA PRINT (Optimisation pour l'impression papier) */
         @media print {
-            body {
-                background: white; 
-                padding: 0;
-                margin: 0;
-            }
-            main {
-                box-shadow: none;
-                border-radius: 0;
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                border: none;
-            }
-            /* Masquer tout ce qui n'est pas le contenu des messages */
-            .action-button-container, footer, .hero-carousel-container, .whatsapp-share-button { 
+            body { background: white; padding: 0; margin: 0; }
+            main { box-shadow: none; border-radius: 0; margin: 0; padding: 0; width: 100%; border: none; }
+            .action-button-container, footer, .hero-carousel-container, .whatsapp-share-button, .intro { 
                 display: none !important; 
             }
             .testimonial {
                 box-shadow: none !important;
                 border: 1px dashed #ccc;
                 page-break-inside: avoid;
-                margin-bottom: 15px;
-                padding: 15px;
+                margin-bottom: 20px;
+                padding: 20px;
                 border-left: 5px solid theme('colors.primary-wine') !important; 
-                position: relative; /* Pour assurer que les éléments masqués ne laissent pas d'espace */
             }
+            .testimonial .text-2xl { font-size: 1.5rem; }
+            .testimonial .text-lg { font-size: 1.1rem; }
+            .testimonial .italic { font-style: normal; } /* Désactiver l'italique pour l'impression */
         }
     </style>
 </head>
@@ -322,8 +310,8 @@
             </div>
         </div>
 
-        <h1 class="text-4xl lg:text-5xl text-center mt-0 mb-2 text-primary-wine">Livre des Souhaits</h1>
-        <div class="intro text-center pb-4 mb-10">
+        <h1 class="text-4xl lg:text-5xl text-center mt-0 mb-2 text-primary-wine">Livre d'Or des Souhaits</h1>
+        <div class="intro text-center pb-4 mb-10 mx-auto max-w-2xl">
             « Un bouquin d’amour et de bénédictions pour Ruth Mulimbi, célébrons la bonne personne qu'elle est. Joyeux Anniversaire Maria ! »
         </div>
 
@@ -331,7 +319,7 @@
             <div class="text-center text-gray-400 p-8 font-serif">Connexion et chargement des messages...</div>
         </div>
 
-        <div class="action-button-container flex flex-wrap justify-center gap-6 mt-12 mb-10">
+        <div class="action-button-container flex flex-wrap justify-center gap-6 mt-16 mb-12">
             
             <button onclick="window.print()" class="action-button print-button">
                 <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m0 0l2.585 2.585a2 2 0 002.828 0L17 17m0 0v-4a2 2 0 00-2-2h-4a2 2 0 00-2 2v4"></path></svg>
@@ -340,13 +328,13 @@
 
             <a href="index.html" class="action-button back-button">
                 <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 15l-3-3m0 0l3-3m-3 3h8m-9 6h10a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                Retour à la page d'accueil
+                Retour à l'accueil
             </a>
         </div>
     </main>
 
     <footer>
-        <p class="text-gray-500 font-serif">— Gabby Umba 2025 —</p>
+        <p class="text-gray-500 font-serif text-sm">— Créé avec amour par Gabby Umba 2025 —</p>
     </footer>
 
 </body>
