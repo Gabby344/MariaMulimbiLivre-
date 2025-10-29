@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Joyeux Anniversaire Ruth Mulimbi — Livre de témoignages</title>
+    <title>Joyeux Anniversaire Ruth Mulimbi — Le Cadeau des Mots</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -15,27 +15,37 @@
     <style>
         /* VARIABLES COULEURS (Ajustées pour Tailwind) */
         :root {
-            --rose: #d64d77; 
-            --rose-fonce: #8a0c4f; 
-            --fond: #fffcf8; 
-            --fond-secondaire: #ffe4e9; 
+            --rose: #e990b0; /* Rose plus doux */
+            --rose-fonce: #8a0c4f; /* Bordeaux profond */
+            --fond: #fffcf8; /* Papier très clair */
+            --fond-secondaire: #fef0f4; /* Rose très pâle pour le dégradé */
             --texte: #3c3c3c;
         }
 
         body {
             font-family: 'Merriweather', serif;
-            background: linear-gradient(120deg, var(--fond), var(--fond-secondaire));
+            /* Dégradé de fond plus subtil et élégant */
+            background: linear-gradient(135deg, var(--fond), var(--fond-secondaire));
             color: var(--texte);
             margin: 0;
             padding: 0;
             text-align: center;
             opacity: 0;
             animation: fadeIn 1.8s ease-in-out forwards; 
-            border: 8px solid var(--fond-secondaire); 
+            border: 8px solid var(--fond); /* Bordure intérieure pour un effet encadré */
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            
         }
+
+        /* Mise en page principale pour aérer le contenu */
+        main {
+            max-width: 1000px; /* Augmentation de la largeur maximale */
+            margin: 0 auto;
+            padding: 0 20px; /* Padding latéral pour mobile */
+        }
+
 
         @keyframes fadeIn {
             to { opacity: 1; }
@@ -45,16 +55,18 @@
         .hero {
             position: relative;
             overflow: hidden;
-            max-height: 500px;
+            max-height: 550px; /* Plus haut */
             width: 100%;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3); 
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); 
+            margin-top: 30px;
         }
         
         /* CAROUSEL CSS: 9 éléments (8+1 clone) * 100% = 900% */
         .carousel {
             display: flex;
             width: 900%; 
-            max-height: 500px;
+            max-height: 550px;
         }
 
         .carousel-item {
@@ -64,13 +76,13 @@
 
         .hero-img {
             width: 100%;
-            height: 500px;
+            height: 550px;
             object-fit: cover;
-            filter: brightness(65%); 
+            filter: brightness(60%); /* Plus sombre pour faire ressortir le texte */
             transition: filter 0.5s ease;
         }
         
-        /* Message transparent amélioré */
+        /* Message élégant et sublime pour Ruth */
         .hero-text {
             position: absolute;
             top: 50%;
@@ -79,14 +91,14 @@
             color: #fff;
             text-align: center;
             font-family: 'Playfair Display', serif;
-            background: rgba(0, 0, 0, 0.25); 
-            padding: 25px 50px; 
-            border-radius: 15px;
-            backdrop-filter: blur(5px); 
+            background: rgba(138, 12, 79, 0.4); /* Bordeaux translucide pour un look riche */
+            padding: 30px 60px; 
+            border-radius: 20px;
+            backdrop-filter: blur(8px); /* Blur plus intense */
             z-index: 10;
-            border: 2px solid rgba(255, 255, 255, 0.7); 
-            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.9); 
-            box-shadow: 0 0 25px rgba(0,0,0,0.7); 
+            border: 3px solid rgba(255, 255, 255, 0.8); 
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 1); 
+            box-shadow: 0 0 35px rgba(0,0,0,0.8); 
         }
         
         /* Ajustements mobiles pour le texte du carrousel */
@@ -94,43 +106,41 @@
             .hero-text {
                 width: 90%;
                 padding: 15px 10px;
-                white-space: normal; 
-                top: 45%; 
             }
-            .hero-text h1 { font-size: 32px !important; margin-bottom: 5px; letter-spacing: 2px; }
-            .hero-text p { font-size: 16px !important; white-space: normal; }
-            .hero-img { height: 350px; }
+            .hero-text h1 { font-size: 32px !important; margin-bottom: 5px; }
+            .hero-text p { font-size: 18px !important; }
+            .hero-img { height: 400px; }
         }
 
 
-        .hero-text h1 { font-size: 55px; margin-bottom: 8px; color: #fff; font-weight: 700; letter-spacing: 3px; }
+        .hero-text h1 { font-size: 60px; margin-bottom: 5px; color: #fff; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; }
         .hero-text p { 
-            font-size: 26px; 
+            font-size: 32px; /* Texte de Script plus grand */
             font-family: 'Sacramento', cursive; 
-            color: #fff; 
-            line-height: 1.2;
+            color: #ffe0eb; /* Rose très pâle pour le contraste */
+            line-height: 1.3;
         }
 
         /* --- TITRES et INTRODUCTION --- */
         h1:not(.hero-text h1) {
             color: var(--rose-fonce);
-            font-size: 2.8em; 
-            margin-top: 55px;
+            font-size: 3.2em; /* Plus grand */
+            margin-top: 70px; /* Marge pour aérer */
             font-family: 'Playfair Display', serif;
-            letter-spacing: 2px;
-            text-shadow: 1px 2px 3px rgba(0,0,0,0.15); 
+            letter-spacing: 3px;
+            text-shadow: 2px 3px 5px rgba(0,0,0,0.2); 
             font-weight: 700;
         }
 
-        p { font-size: 1.15em; color: #555; line-height: 1.6; }
+        p { font-size: 1.25em; color: #555; line-height: 1.7; max-width: 800px; margin: 15px auto; }
 
         /* --- FORMULAIRE DESIGN --- */
-        form { margin: 40px auto; max-width: 650px; background: #ffffff; padding: 40px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15); text-align: left; border-left: 10px solid var(--rose); 
-            transition: transform 0.3s ease-out;
+        form { margin: 50px auto; max-width: 700px; background: #ffffff; padding: 45px; border-radius: 25px; box-shadow: 0 18px 45px rgba(0, 0, 0, 0.2); text-align: left; border-top: 8px solid var(--rose-fonce); 
+            transition: transform 0.4s ease-in-out;
         }
         form:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+            transform: translateY(-5px);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
         }
 
         label { 
@@ -138,142 +148,92 @@
             color: var(--rose-fonce); 
             display: block; 
             margin-bottom: 5px; 
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
+            font-size: 1.1em;
         }
 
         input, textarea { 
             width: 100%; 
-            padding: 15px; 
-            margin: 8px 0 25px 0; 
-            border-radius: 12px; 
-            border: 2px solid #e0e0e0; 
-            font-size: 1.05em; 
+            padding: 16px; 
+            margin: 8px 0 30px 0; 
+            border-radius: 15px; 
+            border: 2px solid var(--rose); /* Bordure en rose doux */
+            font-size: 1.1em; 
+            background-color: var(--fond);
             transition: border-color 0.3s, box-shadow 0.3s; 
             resize: vertical; 
         }
         input:focus, textarea:focus { 
             outline: none; 
             border-color: var(--rose-fonce); 
-            box-shadow: 0 0 10px rgba(138, 12, 79, 0.4); 
-            background-color: #fefefe;
+            box-shadow: 0 0 15px rgba(138, 12, 79, 0.6); 
+            background-color: #ffffff;
         }
         
         #testimonialForm button[type="submit"] { 
-            padding: 14px 30px; 
+            padding: 16px 35px; 
             background: linear-gradient(145deg, var(--rose), var(--rose-fonce));
-            font-size: 1.2em; 
+            font-size: 1.3em; 
             color: white; 
             border: none; 
-            border-radius: 12px; 
+            border-radius: 50px; /* Bouton arrondi */
             cursor: pointer; 
-            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            font-weight: 800; 
-            box-shadow: 0 6px 15px rgba(138, 12, 79, 0.5); 
-            letter-spacing: 0.5px;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1); 
+            font-weight: 900; 
+            box-shadow: 0 8px 20px rgba(138, 12, 79, 0.6); 
+            letter-spacing: 1px;
             text-transform: uppercase;
         }
         #testimonialForm button[type="submit"]:hover { 
-            transform: translateY(-3px) scale(1.02); 
-            box-shadow: 0 10px 20px rgba(138, 12, 79, 0.7); 
+            transform: translateY(-4px) scale(1.05); 
+            box-shadow: 0 15px 30px rgba(138, 12, 79, 0.9); 
         }
         
-        /* --- STYLE DU BOUTON "VOIR LE LIVRE" --- */
+        /* --- STYLE DU BOUTON "VOIR LE LIVRE" (Mise à jour pour être plus élégant) --- */
         .book-button {
+            /* Bouton de couleur contrastante mais assortie */
+            background-color: var(--rose-fonce);
+            background-image: linear-gradient(45deg, var(--rose-fonce) 50%, #b81c6a 100%);
+            
             @apply inline-flex items-center justify-center 
-                   px-10 py-4 mt-8 mb-16
+                   px-12 py-4 mt-12 mb-20 /* Marges augmentées pour aérer */
                    text-xl font-extrabold text-white
                    rounded-full 
                    shadow-2xl hover:shadow-xl hover:scale-[1.05]
                    transition-all duration-400 ease-out; 
 
-            background-color: var(--rose-fonce);
-            background-image: linear-gradient(45deg, var(--rose-fonce), var(--rose));
-            
-            box-shadow: 0 12px 35px rgba(138, 12, 79, 0.75), 0 0 0 4px rgba(255, 255, 255, 0.7); 
+            box-shadow: 0 15px 40px rgba(138, 12, 79, 0.8), 0 0 0 5px rgba(255, 255, 255, 0.8); 
             border: none;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             text-transform: uppercase;
         }
 
         .book-button:hover { 
-            box-shadow: 0 15px 40px rgba(138, 12, 79, 1); 
+            box-shadow: 0 20px 50px rgba(138, 12, 79, 1); 
         }
-
+        
         /* --- FOOTER SIMPLIFIÉ & RESPONSIVE --- */
-        footer { margin-top: auto; margin-bottom: 30px; padding-top: 20px; font-size: 0.9em; color: #aaa; }
-        .signature { font-family: 'Merriweather', serif; font-size: 1.05em; color: #888; font-weight: 400; display: inline; margin-right: 5px; }
-        .separator { color: #ccc; }
+        footer { margin-top: auto; padding-top: 30px; padding-bottom: 20px; font-size: 1em; color: #888; }
+        .signature { font-family: 'Playfair Display', serif; font-size: 1.1em; color: var(--rose-fonce); font-weight: 700; display: inline; margin-right: 5px; }
         
-        /* Modals & Erreur */
-        .modal-overlay { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
-            background-color: rgba(0, 0, 0, 0.7); 
-            display: none; 
-            align-items: center; 
-            justify-content: center; 
-            z-index: 100; 
-            backdrop-filter: blur(8px); 
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .modal-overlay.open { opacity: 1; display: flex; } 
-
-        .modal-content { 
-            background-color: white; 
-            padding: 35px 50px; 
-            border-radius: 25px; 
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5); 
-            max-width: 90%; 
-            animation: scaleIn 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55); 
-            text-align: center; 
-            border-top: 6px solid var(--rose); 
-        }
-        
-        @keyframes scaleIn { 
-            from { transform: scale(0.6); opacity: 0; } 
-            to { transform: scale(1); opacity: 1; } 
-        }
-        
-        #errorMessage { 
-            color: #fff; 
-            background-color: #e3342f; 
-            border: 1px solid #f9d8d8; 
-            padding: 10px 15px; 
-            border-radius: 10px; 
-            margin-top: -10px; 
-            margin-bottom: 25px; 
-            font-size: 1em; 
-            font-weight: 500; 
-            display: none;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-
-        @media (max-width: 600px) {
-            h1:not(.hero-text h1) { margin-top: 30px; font-size: 2.2em; }
-            form { padding: 25px; margin: 25px auto; }
-        }
-
         /* Amélioration du bloc Contact */
         .contact-info-block {
              margin-top: 60px !important;
-             margin-bottom: 60px !important;
+             margin-bottom: 80px !important;
              background: #ffffff; 
-             padding: 30px;
-             border-radius: 18px;
-             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-             border: 1px solid #eee;
+             padding: 40px;
+             border-radius: 20px;
+             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+             border: 2px solid var(--rose);
         }
 
         .contact-info-item { 
             display: flex; 
             align-items: center; 
             justify-content: center; 
-            margin-bottom: 15px;
-            font-size: 1.05em;
+            margin-bottom: 20px;
+            font-size: 1.15em;
+            text-align: left;
         }
     </style>
 </head>
@@ -295,20 +255,20 @@
             </div>
             
             <div class="hero-text">
-                <h1>🌸 Ruth Mulimbi</h1>
-                <p>« Joyeux Anniversaire Maria (30/10) ! Digne de ta beauté et de ta gentillesse. »</p>
+                <h1>👸🏽 Joyeux Anniversaire</h1>
+                <p>« À notre Reine, Ruth Mulimbi. Brille, car tu es un cadeau ! »</p>
             </div>
         </section>
 
-        <h1>📖 LE CADEAU DES MOTS</h1>
-        <p>Écris un mot doux, un souvenir ou une bénédiction pour elle en ce jour 💌 Ton message sera une surprise !</p>
+        <h1>💖 LE CADEAU DES MOTS</h1>
+        <p>Écris un mot doux, un souvenir précieux ou une bénédiction pour elle en ce jour spécial 💌 **Ton message sera une surprise totale !**</p>
 
         <form id="testimonialForm">
-            <label for="name" class="font-bold text-gray-700 block mb-1">Votre prénom et Nom :</label>
+            <label for="name">Votre prénom et Nom :</label>
             <input type="text" id="name" placeholder="Ex :  Benedicte Nyota" required aria-label="Votre prénom et nom" />
             
-            <label for="message" class="font-bold text-gray-700 block mb-1">Votre message :</label>
-            <textarea id="message" rows="4" placeholder="Ex : Joyeux anniversaire Ruth ! Reste cette belle personne. 💖" required aria-label="Votre message"></textarea>
+            <label for="message">Votre message :</label>
+            <textarea id="message" rows="5" placeholder="Ex : Joyeux anniversaire Ruth ! Reste cette belle personne. Que Dieu te comble. 💖" required aria-label="Votre message"></textarea>
             
             <div id="errorMessage" role="alert"></div>
 
@@ -316,12 +276,13 @@
         </form>
 
         <div>
-            <a href="livre_temoignages_maj.html" class="book-button">
+            <a href="livre.html" class="book-button">
                 <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.5l8 4.5v8l-8 4.5-8-4.5v-8l8-4.5zM12 6.5v11.5M4 11l8 4.5 8-4.5M4 11v8M20 11v8"></path></svg>
                 Voir le livre de messages
             </a>
         </div>
-
+        
+        <h2 class="text-3xl font-display text-rose-fonce mt-10 mb-4">Besoin d'aide ?</h2>
         <div class="max-w-xl mx-auto contact-info-block">
             <h3 class="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-rose-100 pb-3 font-serif">📞 Contact & Commandes</h3>
             <div class="text-gray-700 space-y-4">
@@ -329,16 +290,14 @@
                 <div class="contact-info-item">
                     <svg class="w-6 h-6 mr-3 text-rose-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.774a11.037 11.037 0 006.107 6.107l.774-1.548a1 1 0 011.06-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-7A15.996 15.996 0 012 3z"></path></svg>
                     <p>
-                        <strong>WhatsApp :</strong> 
-                        <a href="tel:+243997227819" class="text-rose-600 hover:text-rose-800 font-semibold transition-colors duration-200 ml-1">+243 99 72 27 819</a>
+                        **WhatsApp :** <a href="tel:+243997227819" class="text-rose-600 hover:text-rose-800 font-semibold transition-colors duration-200 ml-1">+243 99 72 27 819</a>
                     </p>
                 </div>
                 
                 <div class="contact-info-item">
                     <svg class="w-6 h-6 mr-3 text-rose-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 9.4A10.869 10.869 0 0110 4.64v.364A5.99 5.99 0 006.84 10a5.99 5.99 0 003.16 5.036v.364a10.869 10.869 0 01-5.668-4.76zm11.336 0c.34-.6.532-1.282.532-2A1.5 1.5 0 0014.5 7h-9.2a1.5 1.5 0 000 3H12a2 2 0 110 4h-.2A9.878 9.878 0 0110 14.36v-.364a5.99 5.99 0 003.16-5.036 5.99 5.99 0 00-3.16-5.036v-.364A10.869 10.869 0 0115.668 9.4z" clip-rule="evenodd"></path></svg>
                     <p>
-                        <strong>Site web :</strong> 
-                        <a href="https://the-gift-of-words.rf.gd/?i=1" target="_blank" rel="noopener noreferrer" class="text-rose-600 hover:text-rose-800 font-semibold transition-colors duration-200 ml-1">the-gift-of-words.rf.gd</a>
+                        **Site web :** <a href="https://the-gift-of-words.rf.gd/?i=1" target="_blank" rel="noopener noreferrer" class="text-rose-600 hover:text-rose-800 font-semibold transition-colors duration-200 ml-1">the-gift-of-words.rf.gd</a>
                     </p>
                 </div>
             </div>
@@ -347,21 +306,20 @@
 
     <footer> 
         <span class="signature">Gabby Umba</span>
-        <span class="separator">—</span> 
-        <span class="text-gray-500">© 2025</span>
+        <span class="text-gray-500"> | © 2025</span>
     </footer>
 
     <div id="successModal" class="modal-overlay">
         <div class="modal-content">
-            <svg class="mx-auto w-16 h-16 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <h2 class="text-2xl font-bold text-gray-800 mt-4 mb-2">Message envoyé !</h2>
-            <p class="text-gray-600">Votre mot doux a été ajouté au livre. Ruth le découvrira bientôt !</p>
+            <svg class="mx-auto w-20 h-20 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <h2 class="text-3xl font-display text-gray-800 mt-4 mb-3 font-bold">Message envoyé avec amour !</h2>
+            <p class="text-gray-600 font-serif">Votre mot doux est désormais caché dans le livre. Ruth le découvrira lors de la révélation !</p>
             
             <p class="mt-6 text-sm">
-                Vous pouvez maintenant <a href="livre_temoignages_maj.html" class="font-semibold text-rose-500 hover:underline">cliquer sur le bouton Voir le livre</a> pour visualiser tous les messages.
+                Vous pouvez maintenant <a href="livre.html" class="font-semibold text-rose-fonce hover:underline">Voir le livre</a> ou partager le lien d'accueil.
             </p>
 
-            <button onclick="closeModal('successModal')" class="mt-6 px-6 py-2 bg-rose-500 text-white rounded-xl hover:bg-rose-600 transition duration-150 font-bold">
+            <button onclick="closeModal('successModal')" class="mt-8 px-8 py-3 bg-rose-fonce text-white rounded-full hover:bg-rose-700 transition duration-150 font-bold shadow-lg">
                 Fermer
             </button>
         </div>
@@ -369,10 +327,8 @@
 
 
     <script>
-        // Variables globales fournies par l'environnement Canvas
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'lwangagestion';
         
-        // --- VOS NOUVELLES CLÉS FIREBASE INTÉGRÉES ICI (Ligne 360) ---
         const firebaseConfig = typeof __firebase_config !== 'undefined' 
             ? JSON.parse(__firebase_config) 
             : {
@@ -383,7 +339,6 @@
                 messagingSenderId: "508302363143",
                 appId: "1:508302363143:web:35c181528dd84def1a78a2"
             };
-        // -----------------------------------------------------------
 
         // Initialisation Firebase (compatible v9)
         const app = firebase.initializeApp(firebaseConfig);
@@ -391,14 +346,11 @@
 
         // Références aux éléments du DOM
         const form = document.getElementById('testimonialForm');
-        const successModal = document.getElementById('successModal');
-        const errorMessage = document.getElementById('errorMessage');
         const carousel = document.getElementById('heroCarousel');
         const totalImages = 8; 
         let currentIndex = 0;
-        const transitionDuration = 1000; // 1 seconde de transition
+        const transitionDuration = 1000; 
 
-        // Fonction pour ouvrir/fermer le modal
         function openModal(id) {
             document.getElementById(id).classList.add('open');
         }
@@ -411,22 +363,17 @@
         function startCarousel() {
             if (!carousel) return;
 
-            // La largeur de chaque slide doit être 1/(Total + 1 clone)
             const slideWidth = 100 / (totalImages + 1); 
             
             setInterval(() => {
                 currentIndex++;
                 const offset = -currentIndex * slideWidth; 
                 
-                // 1. Appliquer la transition pour le défilement normal
-                carousel.style.transition = `transform ${transitionDuration / 1000}s cubic-bezier(0.42, 0, 0.58, 1)`; // Ease-in-out
+                carousel.style.transition = `transform ${transitionDuration / 1000}s cubic-bezier(0.42, 0, 0.58, 1)`; 
                 carousel.style.transform = `translateX(${offset}%)`;
 
-                // 2. Logique de bouclage après être arrivé sur le clone
                 if (currentIndex >= totalImages) {
-                    // Attendre que la transition du clone soit terminée
                     setTimeout(() => {
-                        // Réinitialiser la position à la première image SANS transition
                         carousel.style.transition = 'none';
                         currentIndex = 0;
                         carousel.style.transform = 'translateX(0)';
@@ -441,6 +388,9 @@
         // --- LOGIQUE DU FORMULAIRE ---
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            const errorMessage = document.getElementById('errorMessage');
+            const successModal = document.getElementById('successModal');
             
             errorMessage.style.display = 'none';
             closeModal('successModal');
@@ -457,11 +407,9 @@
                 return;
             }
 
-            // Chemin de la collection Firestore (Doit correspondre à la règle)
             const collectionPath = `artifacts/${appId}/public/data/testimonials`;
 
             try {
-                // Utiliser le nom de la collection pour ajouter
                 await db.collection(collectionPath).add({
                     name: name,
                     message: message,
