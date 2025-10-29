@@ -41,7 +41,7 @@
     let app, db, auth;
     const livre = document.getElementById('livre');
 
-    // 💖 LOGIQUE DU CARROUSEL (Déplacée et corrigée)
+    // 💖 LOGIQUE DU CARROUSEL
     const totalBookImages = 3; 
     let bookCurrentIndex = 0;
 
@@ -73,7 +73,6 @@
             startCarousel(); // Démarrage du carrousel après connexion
         } catch (error) {
             console.error("Erreur Firebase au démarrage :", error);
-            // Afficher l'erreur à l'utilisateur
             livre.innerHTML = "<p class='text-center text-red-600 mt-10 p-4 bg-white rounded-xl shadow-md'>⚠️ Erreur : Impossible de se connecter à la base de données. Assurez-vous que l'application est bien configurée ou que les règles de sécurité Firestore sont publiques.</p>";
         }
     }
@@ -120,7 +119,6 @@
           const safeName = name.replace(/'/g, "\\'").replace(/"/g, '\\"');
 
           const div = document.createElement('div');
-          // Utilisation des classes Tailwind pour l'esthétique "professionnelle"
           div.className = 'testimonial bg-white p-6 md:p-8 mb-6 rounded-xl shadow-lg relative border-l-4 border-primary-wine/70 hover:shadow-xl transition-all duration-300';
           div.innerHTML = `
             <div class="testimonial-header flex justify-between items-start mb-4 border-b border-gray-100 pb-2">
@@ -144,13 +142,10 @@
         });
       }, (error) => {
         console.error("Erreur onSnapshot Firestore :", error);
-        // Afficher l'erreur à l'utilisateur
         livre.innerHTML = "<p class='text-center text-red-600 mt-10 p-4 bg-white rounded-xl shadow-md'>⚠️ Erreur : Problème de connexion en temps réel aux messages. Vérifiez les règles de sécurité Firestore.</p>";
       });
     }
 
-
-    // Lancement de l'authentification et du chargement des données
     document.addEventListener('DOMContentLoaded', authenticate);
   </script>
 
@@ -172,7 +167,6 @@
         margin: 30px auto;
         width: 95%;
         padding: 20px;
-        /* Ombre douce imitant le relief du livre */
         box-shadow: 0 10px 40px rgba(0,0,0,0.15); 
         border-radius: 16px;
         background-color: white; 
@@ -188,11 +182,10 @@
     .intro {
       font-family: 'Merriweather', serif;
       color: theme('colors.gray.600');
-      /* Ligne pointillée élégante */
       border-bottom: 2px dashed theme('colors.secondary-pink'); 
     }
 
-    /* --- STYLES CARROUSEL (INCHANGÉS) --- */
+    /* --- STYLES CARROUSEL --- */
     .hero-carousel-container {
       position: relative;
       height: 380px; 
@@ -218,19 +211,28 @@
       filter: brightness(95%);
     }
 
-    /* --- BOUTON D'IMPRESSION STYLÉ (AMÉLIORÉ) --- */
+    /* --- BOUTON D'IMPRESSION STYLÉ (AMÉLIORÉ et PROFESSIONNEL) --- */
     .print-button {
-      /* Dégradé de couleur plus intense */
+      /* Dégradé de couleur audacieux */
       background: linear-gradient(135deg, theme('colors.primary-wine'), theme('colors.secondary-pink'));
+      
+      /* Utilisation des classes Tailwind pour la mise en forme et les effets */
       @apply inline-flex items-center 
              px-12 py-4 mt-8 
              rounded-full text-white 
              text-lg font-extrabold tracking-wider 
              transition-all duration-300 transform 
-             hover:scale-[1.05] hover:shadow-2xl; /* Plus grand et plus visible */
+             hover:scale-[1.05] hover:shadow-2xl; /* Effet de zoom et d'ombre au survol */
       
-      /* Ombre plus profonde */
-      box-shadow: 0 10px 30px rgba(138, 12, 79, 0.6); 
+      /* Ombre plus profonde et colorée pour un effet 3D professionnel */
+      box-shadow: 0 10px 30px rgba(138, 12, 79, 0.7); 
+      border: 2px solid rgba(255, 255, 255, 0.4); /* Bordure subtile pour le relief */
+    }
+
+    /* Changement de couleur au survol pour un meilleur feedback */
+    .print-button:hover {
+        box-shadow: 0 15px 40px rgba(138, 12, 79, 0.8);
+        background: linear-gradient(135deg, theme('colors.secondary-pink'), theme('colors.primary-wine'));
     }
     
     /* FOOTER */
@@ -266,10 +268,9 @@
         page-break-inside: avoid;
         margin-bottom: 15px;
         padding: 15px;
-        /* Ajout d'une bordure élégante à l'impression */
         border-left: 5px solid theme('colors.primary-wine', 1) !important; 
       }
-      .testimonial button { /* Cache le bouton WhatsApp à l'impression */
+      .testimonial button { 
           display: none !important;
       }
     }
@@ -297,14 +298,14 @@
 
     <div class="flex justify-center mt-12">
         <button onclick="window.print()" class="print-button">
-            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m0 0l2.585 2.585a2 2 0 002.828 0L17 17m0 0v-4a2 2 0 00-2-2h-4a2 2 0 00-2 2v4"></path></svg>
+            <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m0 0l2.585 2.585a2 2 0 002.828 0L17 17m0 0v-4a2 2 0 00-2-2h-4a2 2 0 00-2 2v4"></path></svg>
             Imprimer ce livre d'or
         </button>
     </div>
   </main>
 
   <footer>
-    <p>— Gabby Umba, 2025 —</p>
+    <p>— Gabby Umba 2025 —</p>
   </footer>
 
 </body>
