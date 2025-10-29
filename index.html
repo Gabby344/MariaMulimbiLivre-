@@ -5,84 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Joyeux Anniversaire Ruth Mulimbi — Le Cadeau des Mots</title>
 
+    <meta property="og:title" content="Livre d'Or Virtuel pour Ruth Mulimbi 💖" />
+    <meta property="og:description" content="Laissez un message d'amour et de bénédictions pour Ruth à l'occasion de son anniversaire !" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://gabby344.github.io/" />
+    <meta property="og:image" content="photo1.JPG" /> 
+
     <script src="https://cdn.tailwindcss.com"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Merriweather:wght@300;400;700&family=Sacramento&display=swap" rel="stylesheet">
-
+    
     <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore-compat.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.js"></script>
+
+    <script>
+        // Configuration Tailwind harmonisée
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-wine': '#8a0c4f',      /* Bordeaux Profond */
+                        'secondary-pink': '#e990b0',    /* Rose doux */
+                        'bg-paper': '#fffcf8',          /* Fond clair */
+                    },
+                    fontFamily: {
+                        'serif': ['Merriweather', 'serif'],
+                        'display': ['Playfair Display', 'serif'],
+                        'sacramento': ['Sacramento', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        /* VARIABLES COULEURS (Ajustées pour Tailwind) */
+        /* Variables CSS */
         :root {
-            --rose: #e990b0; /* Rose plus doux */
-            --rose-fonce: #8a0c4f; /* Bordeaux profond */
-            --fond: #fffcf8; /* Papier très clair */
-            --fond-secondaire: #fef0f4; /* Rose très pâle pour le dégradé */
+            --rose-fonce: #8a0c4f;
+            --rose-doux: #e990b0;
+            --fond: #fffcf8;
+            --fond-secondaire: #fef0f4;
             --texte: #3c3c3c;
         }
 
         body {
-            font-family: 'Merriweather', serif;
-            /* Dégradé de fond plus subtil et élégant */
+            font-family: theme('fontFamily.serif');
             background: linear-gradient(135deg, var(--fond), var(--fond-secondaire));
             color: var(--texte);
-            margin: 0;
-            padding: 0;
-            text-align: center;
-            opacity: 0;
-            animation: fadeIn 1.8s ease-in-out forwards; 
-            border: 8px solid var(--fond); /* Bordure intérieure pour un effet encadré */
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            
+            text-align: center;
         }
 
-        /* Mise en page principale pour aérer le contenu */
         main {
-            max-width: 1000px; /* Augmentation de la largeur maximale */
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 0 20px; /* Padding latéral pour mobile */
+            padding: 0 20px;
+            flex-grow: 1;
         }
 
-
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-
-        /* --- HERO SECTION --- */
+        /* --- HERO SECTION & CAROUSEL (Élégance & Transparence) --- */
         .hero {
             position: relative;
-            overflow: hidden;
-            max-height: 550px; /* Plus haut */
+            max-height: 550px; 
             width: 100%;
             border-radius: 15px;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4); 
             margin-top: 30px;
+            overflow: hidden;
+            border: 5px solid white; /* Cadre blanc chic */
         }
         
-        /* CAROUSEL CSS: 9 éléments (8+1 clone) * 100% = 900% */
-        .carousel {
-            display: flex;
-            width: 900%; 
-            max-height: 550px;
-        }
-
-        .carousel-item {
-            width: calc(100% / 9); 
-            flex-shrink: 0;
-        }
-
-        .hero-img {
-            width: 100%;
-            height: 550px;
-            object-fit: cover;
-            filter: brightness(60%); /* Plus sombre pour faire ressortir le texte */
-            transition: filter 0.5s ease;
-        }
+        .carousel { display: flex; width: 900%; max-height: 550px; }
+        .carousel-item { width: calc(100% / 9); flex-shrink: 0; }
+        .hero-img { width: 100%; height: 550px; object-fit: cover; filter: brightness(70%); transition: filter 0.5s ease; }
         
-        /* Message élégant et sublime pour Ruth */
+        /* Message Translucide et Pro (Effet Verre Dépoli) */
         .hero-text {
             position: absolute;
             top: 50%;
@@ -90,155 +91,192 @@
             transform: translate(-50%, -50%);
             color: #fff;
             text-align: center;
-            font-family: 'Playfair Display', serif;
-            background: rgba(138, 12, 79, 0.4); /* Bordeaux translucide pour un look riche */
+            font-family: theme('fontFamily.display');
+            /* Clé du design : fond très légèrement visible et flouté (transparence et blur) */
+            background: rgba(138, 12, 79, 0.2); 
             padding: 30px 60px; 
             border-radius: 20px;
-            backdrop-filter: blur(8px); /* Blur plus intense */
+            backdrop-filter: blur(10px); 
             z-index: 10;
-            border: 3px solid rgba(255, 255, 255, 0.8); 
-            text-shadow: 1px 1px 4px rgba(0, 0, 0, 1); 
-            box-shadow: 0 0 35px rgba(0,0,0,0.8); 
+            border: 2px solid rgba(255, 255, 255, 0.6); 
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 1); 
+            box-shadow: 0 0 40px rgba(0,0,0,0.6); /* Ombre plus diffuse */
         }
         
-        /* Ajustements mobiles pour le texte du carrousel */
-        @media (max-width: 600px) {
-            .hero-text {
-                width: 90%;
-                padding: 15px 10px;
-            }
-            .hero-text h1 { font-size: 32px !important; margin-bottom: 5px; }
-            .hero-text p { font-size: 18px !important; }
-            .hero-img { height: 400px; }
-        }
-
-
         .hero-text h1 { font-size: 60px; margin-bottom: 5px; color: #fff; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; }
         .hero-text p { 
-            font-size: 32px; /* Texte de Script plus grand */
-            font-family: 'Sacramento', cursive; 
-            color: #ffe0eb; /* Rose très pâle pour le contraste */
+            font-size: 32px; 
+            font-family: theme('fontFamily.sacramento'); 
+            color: #ffeff4; /* Rose très pâle pour le contraste */
             line-height: 1.3;
         }
 
-        /* --- TITRES et INTRODUCTION --- */
+        @media (max-width: 600px) {
+            .hero-text { padding: 15px 10px; width: 90%; }
+            .hero-text h1 { font-size: 30px !important; margin-bottom: 5px; }
+            .hero-text p { font-size: 20px !important; }
+            .hero-img { height: 400px; }
+        }
+
+        /* --- TITRE PRINCIPAL --- */
         h1:not(.hero-text h1) {
             color: var(--rose-fonce);
-            font-size: 3.2em; /* Plus grand */
-            margin-top: 70px; /* Marge pour aérer */
-            font-family: 'Playfair Display', serif;
+            font-size: 3.5em;
+            margin-top: 80px;
+            font-family: theme('fontFamily.display');
             letter-spacing: 3px;
-            text-shadow: 2px 3px 5px rgba(0,0,0,0.2); 
+            text-shadow: 2px 3px 5px rgba(0,0,0,0.1); 
             font-weight: 700;
         }
 
-        p { font-size: 1.25em; color: #555; line-height: 1.7; max-width: 800px; margin: 15px auto; }
-
-        /* --- FORMULAIRE DESIGN --- */
-        form { margin: 50px auto; max-width: 700px; background: #ffffff; padding: 45px; border-radius: 25px; box-shadow: 0 18px 45px rgba(0, 0, 0, 0.2); text-align: left; border-top: 8px solid var(--rose-fonce); 
-            transition: transform 0.4s ease-in-out;
-        }
-        form:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
-        }
+        /* --- FORMULAIRE DESIGN PROFESSIONNEL --- */
+        form { margin: 60px auto; max-width: 650px; background: #ffffff; padding: 45px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); text-align: left; border-top: 6px solid var(--rose-fonce); transition: all 0.4s ease; }
+        form:hover { transform: translateY(-3px); box-shadow: 0 15px 45px rgba(0, 0, 0, 0.15); }
 
         label { 
             font-weight: 700; 
             color: var(--rose-fonce); 
             display: block; 
-            margin-bottom: 5px; 
-            letter-spacing: 0.8px;
+            margin-bottom: 8px; 
+            letter-spacing: 1px;
             font-size: 1.1em;
+            font-family: theme('fontFamily.display');
         }
 
         input, textarea { 
             width: 100%; 
             padding: 16px; 
-            margin: 8px 0 30px 0; 
-            border-radius: 15px; 
-            border: 2px solid var(--rose); /* Bordure en rose doux */
+            margin: 0 0 30px 0; 
+            border-radius: 12px; 
+            border: 1px solid #ccc; /* Bordure plus neutre */
             font-size: 1.1em; 
-            background-color: var(--fond);
-            transition: border-color 0.3s, box-shadow 0.3s; 
+            background-color: #f9f9f9;
+            transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s; 
             resize: vertical; 
         }
         input:focus, textarea:focus { 
             outline: none; 
             border-color: var(--rose-fonce); 
-            box-shadow: 0 0 15px rgba(138, 12, 79, 0.6); 
+            box-shadow: 0 0 0 4px rgba(138, 12, 79, 0.2); 
             background-color: #ffffff;
         }
         
+        /* Bouton Soumettre Pro */
         #testimonialForm button[type="submit"] { 
-            padding: 16px 35px; 
-            background: linear-gradient(145deg, var(--rose), var(--rose-fonce));
-            font-size: 1.3em; 
+            width: 100%;
+            padding: 18px 35px; 
+            background: linear-gradient(135deg, #FF69B4, var(--rose-fonce)); /* Dégradé Rose Vif/Bordeaux */
+            font-size: 1.4em; 
             color: white; 
-            border: none; 
-            border-radius: 50px; /* Bouton arrondi */
-            cursor: pointer; 
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1); 
+            border-radius: 10px; 
             font-weight: 900; 
-            box-shadow: 0 8px 20px rgba(138, 12, 79, 0.6); 
-            letter-spacing: 1px;
+            box-shadow: 0 10px 25px rgba(138, 12, 79, 0.7); 
+            letter-spacing: 2px;
             text-transform: uppercase;
         }
         #testimonialForm button[type="submit"]:hover { 
-            transform: translateY(-4px) scale(1.05); 
-            box-shadow: 0 15px 30px rgba(138, 12, 79, 0.9); 
+            transform: translateY(-2px); 
+            box-shadow: 0 15px 35px rgba(138, 12, 79, 0.9); 
+            background: linear-gradient(135deg, var(--rose-fonce), #FF69B4);
         }
         
-        /* --- STYLE DU BOUTON "VOIR LE LIVRE" (Mise à jour pour être plus élégant) --- */
+        /* --- BOUTON "VOIR LE LIVRE" (Bouton d'Action Primaire) --- */
         .book-button {
-            /* Bouton de couleur contrastante mais assortie */
             background-color: var(--rose-fonce);
-            background-image: linear-gradient(45deg, var(--rose-fonce) 50%, #b81c6a 100%);
+            background-image: linear-gradient(45deg, var(--rose-fonce) 40%, #c92c7c 100%);
             
             @apply inline-flex items-center justify-center 
-                   px-12 py-4 mt-12 mb-20 /* Marges augmentées pour aérer */
-                   text-xl font-extrabold text-white
+                   px-12 py-5 mt-16 mb-24 
+                   text-2xl font-extrabold text-white
                    rounded-full 
-                   shadow-2xl hover:shadow-xl hover:scale-[1.05]
                    transition-all duration-400 ease-out; 
 
-            box-shadow: 0 15px 40px rgba(138, 12, 79, 0.8), 0 0 0 5px rgba(255, 255, 255, 0.8); 
-            border: none;
+            box-shadow: 0 15px 40px rgba(138, 12, 79, 0.6); 
             letter-spacing: 2px;
             text-transform: uppercase;
         }
 
         .book-button:hover { 
-            box-shadow: 0 20px 50px rgba(138, 12, 79, 1); 
+            transform: scale(1.05) translateY(-3px); 
+            box-shadow: 0 20px 50px rgba(138, 12, 79, 0.8); 
         }
         
-        /* --- FOOTER SIMPLIFIÉ & RESPONSIVE --- */
-        footer { margin-top: auto; padding-top: 30px; padding-bottom: 20px; font-size: 1em; color: #888; }
-        .signature { font-family: 'Playfair Display', serif; font-size: 1.1em; color: var(--rose-fonce); font-weight: 700; display: inline; margin-right: 5px; }
-        
-        /* Amélioration du bloc Contact */
+        /* --- SECTION CONTACT (Extra Pro & Simple) --- */
         .contact-info-block {
-             margin-top: 60px !important;
-             margin-bottom: 80px !important;
-             background: #ffffff; 
-             padding: 40px;
-             border-radius: 20px;
-             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-             border: 2px solid var(--rose);
+             margin-top: 80px !important;
+             margin-bottom: 100px !important;
+             max-width: 800px;
+             background: var(--fond-secondaire); /* Fond très léger */
+             padding: 40px 60px;
+             border-radius: 25px;
+             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+             border-left: 5px solid var(--rose-doux); /* Touche de design */
         }
+        .contact-title { font-size: 2.2em; font-family: theme('fontFamily.display'); color: var(--rose-fonce); }
 
         .contact-info-item { 
             display: flex; 
             align-items: center; 
-            justify-content: center; 
+            justify-content: flex-start; /* Alignement à gauche */
             margin-bottom: 20px;
             font-size: 1.15em;
             text-align: left;
+            padding-left: 20%; /* Décalage pour centrer visuellement */
         }
+        @media (max-width: 600px) {
+             .contact-info-item { padding-left: 5%; justify-content: flex-start; }
+        }
+
+        .contact-icon { width: 30px; height: 30px; margin-right: 15px; color: var(--rose-fonce); flex-shrink: 0; }
+        .contact-link { color: var(--rose-fonce); font-weight: 700; transition: color 0.2s; }
+        .contact-link:hover { color: #c92c7c; }
+
+        /* MODAL (CONFIRMATION) STYLES */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        .modal-overlay.open { display: flex; }
+        .modal-content {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+            animation: modalIn 0.3s ease-out;
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .modal-button-link {
+            display: block;
+            margin-top: 20px;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, var(--rose-fonce), var(--secondary-pink));
+            color: white;
+            font-weight: bold;
+            border-radius: 50px;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        .modal-button-link:hover { transform: scale(1.03); box-shadow: 0 5px 15px rgba(138, 12, 79, 0.5); }
+
     </style>
 </head>
 
 <body>
+    <audio id="backgroundMusic" loop muted>
+        <source src="happy_bday_jingle.mp3" type="audio/mp3">
+    </audio>
+
     <main class="flex-grow">
         
         <section class="hero">
@@ -261,43 +299,43 @@
         </section>
 
         <h1>💖 LE CADEAU DES MOTS</h1>
-        <p>Écris un mot doux, un souvenir précieux ou une bénédiction pour elle en ce jour spécial 💌 **Ton message sera une surprise totale !**</p>
+        <p class="text-xl max-w-2xl mx-auto font-serif text-gray-700">Écris un mot doux, un souvenir précieux ou une bénédiction pour elle en ce jour spécial. **Ton message sera une surprise totale !**</p>
 
         <form id="testimonialForm">
             <label for="name">Votre prénom et Nom :</label>
-            <input type="text" id="name" placeholder="Ex :  Benedicte Nyota" required aria-label="Votre prénom et nom" />
+            <input type="text" id="name" placeholder="Ex : Kelitha Cigoha" required aria-label="Votre prénom et nom" />
             
             <label for="message">Votre message :</label>
-            <textarea id="message" rows="5" placeholder="Ex : Joyeux anniversaire Ruth ! Reste cette belle personne. Que Dieu te comble. 💖" required aria-label="Votre message"></textarea>
+            <textarea id="message" rows="6" placeholder="Ex : Joyeux anniversaire Ruth ! Ta présence est une bénédiction. Je prie que cette année t'apporte bonheur et succès. 💖" required aria-label="Votre message"></textarea>
             
-            <div id="errorMessage" role="alert"></div>
+            <div id="errorMessage" class="text-red-600 text-lg mb-4 text-center font-bold" role="alert" style="display: none;"></div>
 
             <button type="submit">✨ Ajouter au livre</button>
         </form>
 
         <div>
             <a href="livre.html" class="book-button">
-                <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.5l8 4.5v8l-8 4.5-8-4.5v-8l8-4.5zM12 6.5v11.5M4 11l8 4.5 8-4.5M4 11v8M20 11v8"></path></svg>
+                <svg class="w-8 h-8 mr-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.5l8 4.5v8l-8 4.5-8-4.5v-8l8-4.5zM12 6.5v11.5M4 11l8 4.5 8-4.5M4 11v8M20 11v8"></path></svg>
                 Voir le livre de messages
             </a>
         </div>
         
-        <h2 class="text-3xl font-display text-rose-fonce mt-10 mb-4">Besoin d'aide ?</h2>
         <div class="max-w-xl mx-auto contact-info-block">
-            <h3 class="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-rose-100 pb-3 font-serif">📞 Contact & Commandes</h3>
+            <h2 class="contact-title mb-8">Besoin d'aide ?</h2>
+            
             <div class="text-gray-700 space-y-4">
                 
                 <div class="contact-info-item">
-                    <svg class="w-6 h-6 mr-3 text-rose-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.774a11.037 11.037 0 006.107 6.107l.774-1.548a1 1 0 011.06-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-7A15.996 15.996 0 012 3z"></path></svg>
+                    <svg class="contact-icon" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.031 0C5.405 0 0 5.405 0 12.031c0 2.067.531 4.01 1.54 5.71l-.974 3.766 3.868-.973c1.676.953 3.593 1.458 5.497 1.458 6.626 0 12.031-5.405 12.031-12.031C24.062 5.405 18.657 0 12.031 0z"/></svg>
                     <p>
-                        **WhatsApp :** <a href="tel:+243997227819" class="text-rose-600 hover:text-rose-800 font-semibold transition-colors duration-200 ml-1">+243 99 72 27 819</a>
+                        **WhatsApp :** <a href="https://wa.me/243997227819" target="_blank" rel="noopener noreferrer" class="contact-link">+243 99 72 27 819</a>
                     </p>
                 </div>
                 
                 <div class="contact-info-item">
-                    <svg class="w-6 h-6 mr-3 text-rose-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 9.4A10.869 10.869 0 0110 4.64v.364A5.99 5.99 0 006.84 10a5.99 5.99 0 003.16 5.036v.364a10.869 10.869 0 01-5.668-4.76zm11.336 0c.34-.6.532-1.282.532-2A1.5 1.5 0 0014.5 7h-9.2a1.5 1.5 0 000 3H12a2 2 0 110 4h-.2A9.878 9.878 0 0110 14.36v-.364a5.99 5.99 0 003.16-5.036 5.99 5.99 0 00-3.16-5.036v-.364A10.869 10.869 0 0115.668 9.4z" clip-rule="evenodd"></path></svg>
+                    <svg class="contact-icon" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15.5h2v-7h-2v7zm0-8.5h2V6.5h-2v2z"/></svg>
                     <p>
-                        **Site web :** <a href="https://the-gift-of-words.rf.gd/?i=1" target="_blank" rel="noopener noreferrer" class="text-rose-600 hover:text-rose-800 font-semibold transition-colors duration-200 ml-1">the-gift-of-words.rf.gd</a>
+                        **Site web :** <a href="https://the-gift-of-words.rf.gd/?i=1" target="_blank" rel="noopener noreferrer" class="contact-link">the-gift-of-words.rf.gd</a>
                     </p>
                 </div>
             </div>
@@ -311,22 +349,23 @@
 
     <div id="successModal" class="modal-overlay">
         <div class="modal-content">
-            <svg class="mx-auto w-20 h-20 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <h2 class="text-3xl font-display text-gray-800 mt-4 mb-3 font-bold">Message envoyé avec amour !</h2>
-            <p class="text-gray-600 font-serif">Votre mot doux est désormais caché dans le livre. Ruth le découvrira lors de la révélation !</p>
+            <svg class="mx-auto w-20 h-20 text-primary-wine" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <h2 class="text-3xl font-display text-gray-800 mt-4 mb-3 font-bold">Message reçu ! 💌</h2>
+            <p class="text-gray-600 font-serif">Votre mot doux est désormais enregistré. Cliquez ci-dessous pour voir tous les témoignages.</p>
             
-            <p class="mt-6 text-sm">
-                Vous pouvez maintenant <a href="livre.html" class="font-semibold text-rose-fonce hover:underline">Voir le livre</a> ou partager le lien d'accueil.
-            </p>
+            <a href="livre.html" class="modal-button-link">
+                Voir le Livre d'Or
+            </a>
 
-            <button onclick="closeModal('successModal')" class="mt-8 px-8 py-3 bg-rose-fonce text-white rounded-full hover:bg-rose-700 transition duration-150 font-bold shadow-lg">
-                Fermer
+            <button onclick="closeModal('successModal')" class="mt-4 text-sm text-gray-500 hover:text-gray-800 transition duration-150 font-semibold">
+                Continuer à écrire
             </button>
         </div>
     </div>
 
 
     <script>
+        // Initialisation Firebase (compatible v9, SANS AUTH)
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'lwangagestion';
         
         const firebaseConfig = typeof __firebase_config !== 'undefined' 
@@ -340,7 +379,6 @@
                 appId: "1:508302363143:web:35c181528dd84def1a78a2"
             };
 
-        // Initialisation Firebase (compatible v9)
         const app = firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
@@ -350,7 +388,9 @@
         const totalImages = 8; 
         let currentIndex = 0;
         const transitionDuration = 1000; 
+        const music = document.getElementById('backgroundMusic');
 
+        // Fonctions Modal
         function openModal(id) {
             document.getElementById(id).classList.add('open');
         }
@@ -358,17 +398,28 @@
             document.getElementById(id).classList.remove('open');
         }
 
+        // 1. Démarrage de la musique et déblocage au 1er clic
+        document.addEventListener('DOMContentLoaded', () => {
+             // 1. Démarrer la musique (muette)
+             music.play().catch(e => console.log("Autoplay bloqué.")); 
+             // 2. Débloquer au premier clic de l'utilisateur
+             document.body.addEventListener('click', () => {
+                if (music.muted) {
+                    music.muted = false;
+                    music.volume = 0.4; // Volume doux
+                }
+             }, { once: true });
+        });
 
-        // --- LOGIQUE DU CAROUSEL (Défilement en boucle corrigé et fluide) ---
+
+        // 2. LOGIQUE DU CAROUSEL
         function startCarousel() {
             if (!carousel) return;
-
             const slideWidth = 100 / (totalImages + 1); 
             
             setInterval(() => {
                 currentIndex++;
                 const offset = -currentIndex * slideWidth; 
-                
                 carousel.style.transition = `transform ${transitionDuration / 1000}s cubic-bezier(0.42, 0, 0.58, 1)`; 
                 carousel.style.transform = `translateX(${offset}%)`;
 
@@ -381,28 +432,22 @@
                 }
             }, 5000); // Défilement toutes les 5 secondes
         }
-        
         document.addEventListener('DOMContentLoaded', startCarousel);
-        // --- FIN LOGIQUE DU CAROUSEL ---
 
-        // --- LOGIQUE DU FORMULAIRE ---
+
+        // 3. LOGIQUE DU FORMULAIRE ET CONFETTIS
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const errorMessage = document.getElementById('errorMessage');
-            const successModal = document.getElementById('successModal');
-            
             errorMessage.style.display = 'none';
             closeModal('successModal');
 
-            const nameInput = document.getElementById('name');
-            const messageInput = document.getElementById('message');
-            
-            const name = nameInput.value.trim();
-            const message = messageInput.value.trim();
+            const name = document.getElementById('name').value.trim();
+            const message = document.getElementById('message').value.trim();
 
             if (name.length < 2 || message.length < 5) {
-                errorMessage.textContent = "Merci d’écrire un prénom et un message sincère (min 5 caractères) 💕";
+                errorMessage.textContent = "Merci d’écrire un prénom et un message sincère (minimum 5 caractères) 💕";
                 errorMessage.style.display = 'block';
                 return;
             }
@@ -410,19 +455,26 @@
             const collectionPath = `artifacts/${appId}/public/data/testimonials`;
 
             try {
+                // Écriture dans Firestore (Fonctionne sans Auth si règles = if true)
                 await db.collection(collectionPath).add({
                     name: name,
                     message: message,
                     timestamp: firebase.firestore.FieldValue.serverTimestamp()
                 });
 
-                // Succès : Afficher le modal
+                // Succès : Confettis et Modal Pro
                 form.reset();
+                confetti({
+                    particleCount: 150,
+                    spread: 90,
+                    origin: { y: 0.6 },
+                    colors: ['#8a0c4f', '#e990b0', '#ffffff', '#FF69B4'] 
+                });
                 openModal('successModal');
                 
             } catch (error) {
                 console.error("Erreur lors de l'ajout du document: ", error);
-                errorMessage.textContent = `Désolé, une erreur s'est produite. Erreur: ${error.message}.`;
+                errorMessage.textContent = `❌ Erreur lors de l'envoi. Veuillez vérifier vos règles Firebase. Erreur: ${error.message}.`;
                 errorMessage.style.display = 'block';
             }
         });
