@@ -5,29 +5,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Joyeux Anniversaire Ruth Mulimbi — Livre de témoignages</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Merriweather:wght@300;400;700&family=Sacramento&display=swap" rel="stylesheet">
 
   <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore-compat.js"></script>
 
   <style>
     :root {
-      --rose: #d94f70;
-      --rose-fonce: #c03b5f;
-      --fond: #fffaf0;
-      --fond-secondaire: #ffe4e1;
-      --texte: #333;
+      --rose: #d64d77; /* Rose plus profond */
+      --rose-fonce: #a82e56; /* Bordeaux pourpre */
+      --fond: #fffcf8; /* Blanc cassé doux */
+      --fond-secondaire: #ffe4e9; /* Rose très pâle pour le dégradé */
+      --texte: #3c3c3c;
+      --shadow-soft: 0 6px 15px rgba(0, 0, 0, 0.1);
     }
 
     body {
-      font-family: 'Open Sans', sans-serif;
+      font-family: 'Merriweather', serif;
       background: linear-gradient(120deg, var(--fond), var(--fond-secondaire));
       color: var(--texte);
       margin: 0;
       padding: 0;
       text-align: center;
       opacity: 0;
-      animation: fadeIn 1.8s ease forwards;
+      animation: fadeIn 2.2s ease-in-out forwards;
+      border: 8px solid var(--fond-secondaire); /* Cadre élégant */
     }
 
     @keyframes fadeIn {
@@ -38,28 +40,31 @@
     .hero {
       position: relative;
       overflow: hidden;
-      max-height: 420px;
+      max-height: 500px; /* Augmenter la hauteur pour l'impact */
       width: 100%;
+      box-shadow: var(--shadow-soft);
     }
     
     .carousel {
       display: flex;
-      width: 800%; /* 8 images * 100% */
-      transition: transform 1s ease-in-out;
-      max-height: 420px;
+      width: 800%;
+      transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Transition plus douce */
+      max-height: 500px;
     }
 
     .carousel-item {
-      width: 12.5%; /* 100% / 8 images */
+      width: 12.5%;
       flex-shrink: 0;
       position: relative;
     }
 
     .hero-img {
       width: 100%;
-      height: 420px;
+      height: 500px;
       object-fit: cover;
-      filter: brightness(75%);
+      filter: brightness(80%); /* Moins sombre pour mieux voir les photos */
+      transform-origin: center;
+      transition: transform 0.5s ease-out; /* Effet de zoom au changement de slide si on veut */
     }
 
     .hero-text {
@@ -70,154 +75,151 @@
       color: #fff;
       text-align: center;
       font-family: 'Playfair Display', serif;
-      background: rgba(0, 0, 0, 0.5);
-      padding: 25px 45px;
-      border-radius: 14px;
-      backdrop-filter: blur(4px);
+      /* --- MODIFICATION CLÉ : Transparence Totale pour la boite --- */
+      background: rgba(0, 0, 0, 0.05); /* Juste une légère touche de noir pour le blur */
+      padding: 30px 60px;
+      border-radius: 20px;
+      backdrop-filter: blur(2px); /* Un léger flou pour l'effet de profondeur */
       z-index: 10;
+      border: 2px solid rgba(255, 255, 255, 0.5); /* Bordure subtile et chic */
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); /* Pour aider à la lecture sur fond clair */
     }
 
     .hero-text h1 {
-      font-size: 34px;
-      margin-bottom: 10px;
-      color: #fff; /* S'assurer que le titre est blanc */
+      font-size: 50px; /* Très grand pour l'impact */
+      margin-bottom: 15px;
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 2px;
     }
 
     .hero-text p {
-      font-size: 18px;
-      font-style: italic;
+      font-size: 24px;
+      font-family: 'Sacramento', cursive; /* Style manuscrit pour la citation */
       color: #fff;
+      font-style: normal;
     }
 
-    /* FORMULAIRE et MESSAGES */
-    h1 {
-      color: var(--rose);
-      font-size: 2em;
-      margin-top: 25px;
+    /* TITRES et INTRODUCTION */
+    h1:not(.hero-text h1) {
+      color: var(--rose-fonce);
+      font-size: 2.5em;
+      margin-top: 50px;
       font-family: 'Playfair Display', serif;
+      letter-spacing: 1px;
     }
 
     p {
       font-size: 1.1em;
+      color: #555;
     }
 
+    /* FORMULAIRE DESIGN */
     form {
-      margin: 25px auto;
-      max-width: 600px;
+      margin: 40px auto;
+      max-width: 650px;
       background: #fff;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+      padding: 35px;
+      border-radius: 16px;
+      box-shadow: var(--shadow-soft);
       text-align: left;
-      animation: slideUp 1.2s ease;
+      border-left: 5px solid var(--rose);
+      transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
     }
 
-    @keyframes slideUp {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+    form:hover {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        transform: translateY(-5px);
     }
 
     input, textarea {
       width: 100%;
-      padding: 12px;
-      margin: 8px 0 15px 0;
-      border-radius: 8px;
-      border: 1px solid #ddd;
+      padding: 15px;
+      margin: 10px 0 20px 0;
+      border-radius: 10px;
+      border: 1px solid #e0e0e0;
       font-size: 1em;
-      transition: border 0.2s;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      resize: vertical;
     }
 
     input:focus, textarea:focus {
       outline: none;
       border-color: var(--rose);
+      box-shadow: 0 0 5px rgba(214, 77, 119, 0.5);
     }
 
     button {
-      padding: 10px 18px;
+      padding: 12px 25px;
       background-color: var(--rose);
+      font-size: 1.1em;
       color: white;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
-      transition: all 0.25s;
-      font-weight: 600;
+      transition: all 0.3s;
+      font-weight: 700;
     }
 
     button:hover {
       background-color: var(--rose-fonce);
-      transform: translateY(-2px);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 5px 12px rgba(0,0,0,0.15);
     }
 
-    .confirmation {
-      color: #2b8a3e;
-      font-weight: 600;
-      margin-top: 10px;
-      opacity: 0;
-      transition: opacity 0.6s ease;
-    }
-
-    /* PAGES DE MESSAGES */
+    /* MESSAGES (Livre) */
     .page {
       background: #fff;
-      border-radius: 10px;
-      padding: 20px;
-      margin: 15px auto;
+      border-radius: 12px;
+      padding: 25px;
+      margin: 20px auto;
       max-width: 650px;
       text-align: left;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.07);
-      transition: transform 0.2s;
+      box-shadow: var(--shadow-soft);
+      transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+      border-top: 4px solid var(--fond-secondaire);
     }
 
     .page:hover {
-      transform: translateY(-4px);
+      transform: scale(1.01);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     }
 
     .page strong {
-      color: var(--rose);
-      font-size: 1.1em;
+      color: var(--rose-fonce);
+      font-size: 1.2em;
+      font-weight: 700;
     }
 
     .page p {
-      margin-top: 5px;
-      line-height: 1.6em;
+      margin-top: 10px;
+      line-height: 1.7em;
     }
 
-    /* WHATSAPP BUTTON */
-    .whatsapp-button {
-      background-color: #25D366;
-      color: white;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 6px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 12px;
-      font-weight: bold;
-      transition: transform 0.2s;
-    }
-
-    .whatsapp-button img {
-      height: 18px;
-    }
-
-    .whatsapp-button:hover {
-      transform: scale(1.05);
-    }
-
+    /* FOOTER ET LIEN */
     footer {
-      margin: 50px 0 20px 0;
-      font-size: 0.9em;
-      color: #777;
+      margin: 60px 0 30px 0;
+      font-size: 1em;
+      color: #888;
+    }
+    
+    .signature {
+        font-family: 'Sacramento', cursive;
+        font-size: 2.5em;
+        color: var(--rose-fonce);
+        display: block;
+        margin-top: 5px;
     }
 
     a {
       color: var(--rose-fonce);
       text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s;
     }
 
     a:hover {
+      color: var(--rose);
       text-decoration: underline;
     }
 
@@ -225,10 +227,11 @@
       .hero-text {
         padding: 15px 25px;
       }
-      .hero-text h1 { font-size: 26px; }
-      .hero-text p { font-size: 15px; }
+      .hero-text h1 { font-size: 40px; }
+      .hero-text p { font-size: 20px; }
       form, .page { width: 90%; }
-      .hero-img { height: 350px; }
+      .hero-img { height: 400px; }
+      h1:not(.hero-text h1) { margin-top: 30px; font-size: 2em; }
     }
   </style>
 </head>
@@ -253,7 +256,7 @@
   </section>
 
   <h1>📖 THE GIFT OF WORDS</h1>
-  <p>Écris un mot doux, un souvenir ou une bénédiction pour elle 💌</p>
+  <p>Écris un mot doux, un souvenir ou une bénédiction pour elle 💌 Ton message apparaîtra en direct !</p>
 
   <form id="testimonialForm">
     <label for="name"><strong>Ton prénom :</strong></label>
@@ -270,7 +273,10 @@
 
   <div id="book"></div>
 
-  <footer> <strong>Gabby Umba</strong> — © 2025</footer>
+  <footer> 
+    <span class="signature">Gabby Umba</span>
+    — © 2025
+  </footer>
 
   <script>
     // NOUVELLE CONFIGURATION FIREBASE
