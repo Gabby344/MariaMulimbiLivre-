@@ -192,27 +192,31 @@
             margin: 15px auto;
         }
 
-        /* --- Carrousel d'images (NOUVEAU) --- */
+        /* --- Carrousel d'images (CORRIGÉ) --- */
         .carousel-container {
             width: 100%;
             overflow: hidden;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            margin-top: -20px; /* Remonte un peu pour un meilleur visuel */
+            margin-top: -20px; 
             margin-bottom: 40px;
             position: relative;
+            /* Hauteur fixe pour les grands écrans */
+            height: 450px; 
         }
-
+        
         .carousel-track {
             display: flex;
             transition: transform 0.8s ease-in-out;
+            height: 100%; /* S'assurer qu'il prend toute la hauteur */
         }
 
         .carousel-slide {
             min-width: 100%;
             flex-shrink: 0;
             position: relative;
-            padding-bottom: 56.25%; /* Ratio 16:9 */
+            /* Suppression du padding-bottom: 56.25% qui créait des espaces blancs non désirés */
+            height: 100%; 
         }
 
         .carousel-slide img {
@@ -221,8 +225,15 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: cover; /* Assure que l'image couvre le conteneur sans être déformée */
             object-position: center;
+        }
+        
+        /* Ajustement pour les petits écrans (téléphones) */
+        @media (max-width: 768px) {
+            .carousel-container {
+                height: 250px; /* Hauteur réduite pour mobile */
+            }
         }
 
         /* Styles d'impression (inchangés) */
@@ -286,7 +297,7 @@
     </main>
 
     <footer>
-        <span class="text-gray-500 mb-6 block text-sm">--- Gabby Umba 2025 ---</span>
+        <span class="text-gray-500 mb-6 block text-sm">--- Créé avec amour par Gabby Umba 2025 ---</span>
     </footer>
 
 
@@ -431,17 +442,24 @@
             }
         };
 
-        // Logique du Carrousel d'Images (NOUVEAU)
+        // Logique du Carrousel d'Images (Mise à jour pour les slides)
         let slideIndex = 0;
-        const slides = document.querySelectorAll('.carousel-slide');
-        const totalSlides = slides.length;
-        const carouselTrack = document.getElementById('carouselTrack');
-
+        
         const showSlides = () => {
+            const slides = document.querySelectorAll('.carousel-slide');
+            const totalSlides = slides.length;
+            const carouselTrack = document.getElementById('carouselTrack');
+
+            if (totalSlides === 0 || !carouselTrack) return;
+            
             carouselTrack.style.transform = `translateX(${-slideIndex * 100}%)`;
         };
 
         const nextSlide = () => {
+            const slides = document.querySelectorAll('.carousel-slide');
+            const totalSlides = slides.length;
+            if (totalSlides <= 1) return;
+
             slideIndex = (slideIndex + 1) % totalSlides;
             showSlides();
         };
@@ -450,7 +468,8 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadTestimonials(); 
             
-            // Démarrage du carrousel uniquement si des slides existent
+            // Démarrage du carrousel 
+            const totalSlides = document.querySelectorAll('.carousel-slide').length;
             if (totalSlides > 1) {
                 showSlides();
                 setInterval(nextSlide, 5000); // Change d'image toutes les 5 secondes
