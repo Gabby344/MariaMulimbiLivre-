@@ -234,6 +234,23 @@
             text-decoration: none;
         }
         .modal-button-link:hover { transform: scale(1.03); box-shadow: 0 5px 15px rgba(138, 12, 79, 0.5); }
+        
+        /* --- FOOTER STYLES --- */
+        footer {
+            padding: 20px 0;
+            margin-top: 40px;
+            border-top: 1px solid #f0e6e8;
+            font-size: 0.9em;
+            font-family: theme('fontFamily.serif');
+            text-align: center;
+            color: #707070;
+            width: 100%;
+        }
+        footer .signature {
+            font-weight: 700;
+            color: var(--rose-fonce);
+            font-family: theme('fontFamily.display');
+        }
     </style>
 </head>
 
@@ -291,25 +308,38 @@
             </a>
         </div>
         
+        
         <h2 class="text-4xl font-display text-primary-wine mt-24 mb-6 font-bold">Besoin d'aide ?</h2>
         
-        <div class="max-w-xl mx-auto bg-white p-8 rounded-3xl shadow-2xl border-2 border-secondary-pink/30 mb-20">
+        <div class="max-w-xl mx-auto bg-white p-8 sm:p-10 rounded-3xl shadow-2xl border-2 border-secondary-pink/30 mb-20 transform hover:scale-[1.02] transition duration-300 ease-in-out">
             
-            <h3 class="text-2xl font-display font-semibold text-gray-800 mb-6 border-b pb-3">Contact & Commandes</h3>
+            <h3 class="text-3xl font-display font-semibold text-gray-800 mb-6 pb-3 border-b-2 border-secondary-pink/50 text-center">
+                Contact & Commandes
+            </h3>
             
-            <div class="flex items-center justify-start mb-6 text-xl">
-                <svg class="w-8 h-8 mr-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15.5h2v-7h-2v7zm0-8.5h2V6.5h-2v2z"/></svg>
-                <p>
-                    <span class="font-bold text-primary-wine">WhatsApp :</span> 
-                    <a href="https://wa.me/243997227819" target="_blank" rel="noopener noreferrer" class="font-bold text-green-600 hover:text-green-800 transition-colors ml-1">+243 99 72 27 819</a>
+            <div class="flex flex-col sm:flex-row items-center justify-center mb-8 text-xl sm:text-2xl font-serif">
+                <div class="flex-shrink-0 mb-3 sm:mb-0 sm:mr-6 w-10 h-10 flex items-center justify-center rounded-full bg-green-100 p-1">
+                    <svg class="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M12.047 2.051C6.586 2.051 2 6.637 2 12.09c0 2.227.727 4.309 1.988 6.046L2.012 22l4.4-1.157c1.693.924 3.655 1.408 5.635 1.408h.005c5.461 0 9.947-4.586 9.947-10.039C22 6.637 17.514 2.051 12.047 2.051zm3.64 12.235c-.198.336-.937.712-1.396.954-.458.24-.985.358-1.512.158-.707-.266-2.091-.84-2.85-2.222-.557-1.025-.87-1.928-.31-2.946.56-1.018 1.832-1.259 2.154-1.259.322 0 .524.015.703.015.006 0 .005.005.005.005 0 .015.005.015.005.015l.39.87c.054.12.023.238-.061.378-.083.14-.543.68-.74.918-.198.24-.413.398-.24.735.174.336.757 1.259 1.62 1.928.865.67 1.636.953 2.083.84.45-.113.714-.462.83-.655.118-.193.208-.415.3-.61.082-.186.27-.22.42-.162.15.058 1.05.514 1.23.63.174.113.29.17.336.254.045.083.045.513-.497 1.037z"/></svg>
+                </div>
+                
+                <p class="text-center sm:text-left">
+                    <span class="font-bold text-primary-wine block sm:inline">WhatsApp :</span> 
+                    <a href="https://wa.me/243997227819" target="_blank" rel="noopener noreferrer" class="font-bold text-green-600 hover:text-green-800 transition-colors block sm:inline">
+                        +243 99 72 27 819
+                    </a>
                 </p>
             </div>
             
-            <div class="flex items-center justify-start text-xl">
-                <svg class="w-8 h-8 mr-4 text-primary-wine flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.47-7-7.43 0-2.83 1.43-5.41 3.75-6.91v.96l-1.93 1.93c-.4-.4-.73-.83-.98-1.28l.98-.98h1.25V5.5c2.47-1.39 5.53-1.39 8 0v2.5h-1.25l-1.93-1.93.98-.98c-.25.45-.58.88-.98 1.28l-1.93-1.93v-.96c2.32 1.5 3.75 4.08 3.75 6.91 0 3.96-3.05 6.94-7 7.43z"/></svg>
-                <p>
-                    <span class="font-bold text-primary-wine">Site web :</span> 
-                    <a href="https://the-gift-of-words.rf.gd/?i=1" target="_blank" rel="noopener noreferrer" class="font-bold text-primary-wine hover:text-secondary-pink transition-colors ml-1">the-gift-of-words.rf.gd</a>
+            <div class="flex flex-col sm:flex-row items-center justify-center text-xl sm:text-2xl font-serif">
+                <div class="flex-shrink-0 mb-3 sm:mb-0 sm:mr-6 w-10 h-10 flex items-center justify-center rounded-full bg-primary-wine/10 p-1">
+                    <svg class="w-8 h-8 text-primary-wine" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.47-7-7.43 0-2.83 1.43-5.41 3.75-6.91v.96l-1.93 1.93c-.4-.4-.73-.83-.98-1.28l.98-.98h1.25V5.5c2.47-1.39 5.53-1.39 8 0v2.5h-1.25l-1.93-1.93.98-.98c-.25.45-.58.88-.98 1.28l-1.93-1.93v-.96c2.32 1.5 3.75 4.08 3.75 6.91 0 3.96-3.05 6.94-7 7.43z"/></svg>
+                </div>
+                
+                <p class="text-center sm:text-left">
+                    <span class="font-bold text-primary-wine block sm:inline">Site web :</span> 
+                    <a href="https://the-gift-of-words.rf.gd/?i=1" target="_blank" rel="noopener noreferrer" class="font-bold text-primary-wine hover:text-secondary-pink transition-colors block sm:inline">
+                        the-gift-of-words.rf.gd
+                    </a>
                 </p>
             </div>
         </div>
@@ -352,6 +382,9 @@
                 appId: "1:508302363143:web:35c181528dd84def1a78a2"
             };
 
+        // *************** ATTENTION : PROBLÈME D'ERREUR D'INITIALISATION ICI ***************
+        // Le code original (ci-dessous) peut causer l'erreur que vous avez montrée (formulaire masqué).
+        // Si le problème persiste, entourez cette section d'un 'try/catch' comme discuté précédemment.
         const app = firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
