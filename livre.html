@@ -83,7 +83,7 @@
             font-style: italic;
         }
 
-        /* --- Animation d'entrée --- */
+        /* --- Animation d'entrée des messages --- */
         @keyframes fade-in-up {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -191,7 +191,41 @@
             width: 300px;
             margin: 15px auto;
         }
-        
+
+        /* --- Carrousel d'images (NOUVEAU) --- */
+        .carousel-container {
+            width: 100%;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            margin-top: -20px; /* Remonte un peu pour un meilleur visuel */
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.8s ease-in-out;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            flex-shrink: 0;
+            position: relative;
+            padding-bottom: 56.25%; /* Ratio 16:9 */
+        }
+
+        .carousel-slide img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        /* Styles d'impression (inchangés) */
         @media print {
             body { background: none; color: #000; font-size: 12pt; }
             main { max-width: none; margin: 0; padding: 0; }
@@ -202,6 +236,7 @@
             .testimonial-card::before { display: none; }
             .testimonial-name, .testimonial-message, .testimonial-date { padding-left: 0; }
             .testimonial-signature { font-family: Arial, sans-serif !important; font-size: 1.2em; color: #000; border-top: 1px solid #ccc; }
+            .carousel-container { display: none; } /* Cacher le carrousel à l'impression */
         }
     </style>
 </head>
@@ -213,6 +248,14 @@
 
     <main>
         
+        <div class="carousel-container no-print">
+            <div class="carousel-track" id="carouselTrack">
+                <div class="carousel-slide"><img src="https://via.placeholder.com/800x450/e990b0/ffffff?text=Image+1+de+Ruth" alt="Ruth Image 1"></div>
+                <div class="carousel-slide"><img src="https://via.placeholder.com/800x450/8a0c4f/ffffff?text=Image+2+de+Ruth" alt="Ruth Image 2"></div>
+                <div class="carousel-slide"><img src="https://via.placeholder.com/800x450/e990b0/ffffff?text=Image+3+de+Ruth" alt="Ruth Image 3"></div>
+            </div>
+        </div>
+
         <h1 class="main-title text-5xl lg:text-6xl text-center mt-12 mb-2 font-extrabold tracking-widest">
             Livre d'Or des Souhaits
         </h1>
@@ -224,21 +267,6 @@
         <blockquote class="intro-quote">
             « Un bouquin d'amour et de bénédictions pour Ruth Mulimbi, célébrons la bonne personne qu'elle est. Joyeux Anniversaire ! »
         </blockquote>
-
-        <div class="no-print bg-white p-6 rounded-xl shadow-lg mb-10 border-t-4 border-secondary-pink">
-            <h3 class="text-xl font-display font-bold text-primary-wine mb-4">Filtrer par Catégorie :</h3>
-            
-            <div class="flex justify-center">
-                
-                <select id="filterCategory" class="p-3 border rounded-lg w-full max-w-md focus:ring-2 focus:ring-primary-wine/50">
-                    <option value="all">— Afficher toutes les catégories —</option>
-                    <option value="love">💖 Mot d'Amour & Félicitations</option>
-                    <option value="blessing">🙏 Bénédiction & Prière</option>
-                    <option value="memory">🌟 Souvenir Mémorable</option>
-                    <option value="humor">😂 Blague & Humour</option>
-                </select>
-            </div>
-        </div>
 
         <section id="testimonialsContainer" class="mt-8"></section>
 
@@ -258,7 +286,7 @@
     </main>
 
     <footer>
-        <span class="text-gray-500 mb-6 block text-sm">--- Créé avec amour par Gabby Umba 2025 ---</span>
+        <span class="text-gray-500 mb-6 block text-sm">--- Gabby Umba 2025 ---</span>
     </footer>
 
 
@@ -301,19 +329,16 @@
             const docRef = db.collection(collectionPath).doc(docId);
             
             try {
-                // Incrémenter atomiquement le champ dans Firestore
                 await docRef.update({
                     [`reactions.${reactionType}`]: firebase.firestore.FieldValue.increment(1)
                 });
 
-                // Mettre à jour le compte sur l'interface utilisateur
                 const countElement = button.querySelector('.reaction-count');
                 if (countElement) {
                     const currentCount = parseInt(countElement.textContent) || 0;
                     countElement.textContent = currentCount + 1;
                 }
                 
-                // Désactiver le bouton pour éviter les spams
                 button.disabled = true;
                 button.style.opacity = 0.8;
                 button.style.cursor = 'default';
@@ -323,25 +348,20 @@
             }
         };
 
-        // Fonction pour charger et afficher les messages (avec filtre)
-        const loadTestimonials = async (categoryFilter = 'all') => {
+        // Fonction pour charger et afficher les messages (sans filtre/tri)
+        const loadTestimonials = async () => {
             container.innerHTML = '';
             
             try {
                 let query = db.collection(collectionPath);
                 
-                // Appliquer le Filtre de Catégorie
-                if (categoryFilter !== 'all') {
-                    query = query.where('category', '==', categoryFilter);
-                }
-
                 // Ordre par défaut : plus récent en premier
                 query = query.orderBy('timestamp', 'desc');
 
                 const snapshot = await query.get();
 
                 if (snapshot.empty) {
-                    container.innerHTML = '<p class="text-2xl text-gray-500 mt-16 font-display">Aucun message trouvé dans cette catégorie.</p>';
+                    container.innerHTML = '<p class="text-2xl text-gray-500 mt-16 font-display">Aucun message n\'a encore été enregistré. Soyez le premier !</p>';
                     countValue.textContent = '0';
                     return;
                 }
@@ -411,18 +431,30 @@
             }
         };
 
-        // Gestion des événements de Filtre
+        // Logique du Carrousel d'Images (NOUVEAU)
+        let slideIndex = 0;
+        const slides = document.querySelectorAll('.carousel-slide');
+        const totalSlides = slides.length;
+        const carouselTrack = document.getElementById('carouselTrack');
+
+        const showSlides = () => {
+            carouselTrack.style.transform = `translateX(${-slideIndex * 100}%)`;
+        };
+
+        const nextSlide = () => {
+            slideIndex = (slideIndex + 1) % totalSlides;
+            showSlides();
+        };
+
+        // Chargement initial des messages et démarrage du carrousel
         document.addEventListener('DOMContentLoaded', () => {
-            loadTestimonials(); // Chargement initial
+            loadTestimonials(); 
             
-            const filterCategory = document.getElementById('filterCategory');
-
-            const applyFilters = () => {
-                const category = filterCategory.value;
-                loadTestimonials(category);
-            };
-
-            if (filterCategory) filterCategory.addEventListener('change', applyFilters);
+            // Démarrage du carrousel uniquement si des slides existent
+            if (totalSlides > 1) {
+                showSlides();
+                setInterval(nextSlide, 5000); // Change d'image toutes les 5 secondes
+            }
 
             // Écouteur global pour les boutons de réaction
             document.addEventListener('click', (e) => {
