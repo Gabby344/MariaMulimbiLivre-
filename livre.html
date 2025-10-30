@@ -2,15 +2,18 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Livre d'Or des Souhaits – Joyeux Anniversaire Ruth Mulimbi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Livre d'Or - Messages pour Ruth</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Merriweather:ital,wght@0,300;0,700;1,300;1,400&family=Sacramento&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Merriweather:wght@300;400;700&family=Sacramento&display=swap" rel="stylesheet">
     
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.5.2/firebase-firestore-compat.js"></script>
+
     <script>
-        // Configuration Tailwind pour harmoniser les couleurs avec index.html
+        // Configuration Tailwind harmonisée
         tailwind.config = {
             theme: {
                 extend: {
@@ -18,7 +21,6 @@
                         'primary-wine': '#8a0c4f',      /* Bordeaux Profond */
                         'secondary-pink': '#e990b0',    /* Rose doux */
                         'bg-paper': '#fffcf8',          /* Fond clair */
-                        'elegant-gray': '#4a4a4a',      /* Gris foncé pour le texte principal */
                     },
                     fontFamily: {
                         'serif': ['Merriweather', 'serif'],
@@ -30,322 +32,309 @@
         }
     </script>
 
-    <script type="module">
-        // Importation des modules Firebase (SANS AUTHENTIFICATION)
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // --- CONFIGURATION FIREBASE (REPRISE DE INDEX.HTML) ---
-        const userProvidedConfig = {
-            apiKey: "AIzaSyCQdZppl-UsPCXF8iFmXQpcGAFjHEMt838",
-            authDomain: "gestion-saint-charles-lwanga.firebaseapp.com",
-            projectId: "gestion-saint-charles-lwanga",
-            storageBucket: "gestion-saint-charles-lwanga.firebasestorage.app",
-            messagingSenderId: "508302363143",
-            appId: "1:508302363143:web:35c181528dd84def1a78a2"
-        };
-        // ------------------------------
-
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'lwangagestion';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : userProvidedConfig;
-        
-        let app, db; // 'auth' a été supprimé
-        const livre = document.getElementById('livre');
-
-        // 💖 LOGIQUE DU CARROUSEL (Corrigée pour être en boucle fluide)
-        const totalBookImages = 3; 
-        const bookCarousel = document.getElementById('bookCarousel');
-        let bookCurrentIndex = 0;
-        const bookSlideWidth = 100 / (totalBookImages + 1); 
-        const bookTransitionDuration = 1200; 
-
-        function startCarousel() {
-            if (!bookCarousel) return;
-
-            setInterval(() => {
-                bookCurrentIndex++;
-                const offset = -bookCurrentIndex * bookSlideWidth; 
-                
-                bookCarousel.style.transition = `transform ${bookTransitionDuration / 1000}s cubic-bezier(0.42, 0, 0.58, 1)`;
-                bookCarousel.style.transform = `translateX(${offset}%)`;
-
-                if (bookCurrentIndex >= totalBookImages) {
-                    setTimeout(() => {
-                        bookCarousel.style.transition = 'none';
-                        bookCurrentIndex = 0;
-                        bookCarousel.style.transform = 'translateX(0)';
-                    }, bookTransitionDuration); 
-                }
-            }, 6000); // Défilement toutes les 6 secondes
-        }
-
-        // 1. Initialisation SANS AUTHENTIFICATION
-        async function initializeAppAndLoad() {
-            try {
-                app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                
-                console.log("Firebase Init OK (Authentification ignorée).");
-                loadTestimonials();
-                startCarousel(); 
-            } catch (error) {
-                console.error("Erreur Firebase au démarrage :", error);
-                livre.innerHTML = "<p class='text-center text-red-600 mt-10 p-4 bg-white rounded-xl shadow-md'>⚠️ Erreur : Problème de connexion. Veuillez vérifier votre clé API et Project ID.</p>";
-            }
-        }
-
-        // 2. Fonction de partage WhatsApp (Rendue globale)
-        window.shareWhatsApp = (message, sender) => {
-            const cleanMessage = message.trim();
-            // Lien plus court et message concis
-            const formattedMessage = `Message pour Ruth de ${sender}: "${cleanMessage.substring(0, 150)}..." (Voir le livre : ${window.location.href})`;
-            const encoded = encodeURIComponent(formattedMessage);
-            window.open(`https://api.whatsapp.com/send?text=${encoded}`, '_blank');
-        };
-
-        // 3. Chargement et affichage des témoignages (Real-time avec compteur et indicateur "Nouveau")
-        function loadTestimonials() {
-            const collectionPath = `artifacts/${appId}/public/data/testimonials`;
-            const testimonialsRef = collection(db, collectionPath);
-            const q = query(testimonialsRef, orderBy("timestamp", "desc"));
-            const messageCountElement = document.getElementById('messageCount');
-
-            onSnapshot(q, (snapshot) => {
-                const count = snapshot.size;
-                // Mise à jour du compteur professionnel
-                messageCountElement.innerHTML = `<span class="text-primary-wine font-extrabold text-5xl mr-2">${count}</span> messages enregistrés 💖`;
-
-                if (snapshot.empty) {
-                    livre.innerHTML = "<p class='text-center text-gray-500 mt-10 p-4 bg-white rounded-xl shadow-md italic'>Aucun témoignage n’a encore été ajouté. Soyez le premier à laisser votre mot !</p>";
-                    return;
-                }
-
-                livre.innerHTML = ''; 
-                snapshot.forEach((docSnapshot, index) => {
-                    const data = docSnapshot.data();
-                    const name = data.name || "Un admirateur Anonyme";
-                    const message = data.message || "Un beau souhait !";
-                    
-                    const timestamp = data.timestamp ? data.timestamp.toDate() : new Date();
-                    const date = timestamp.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
-                    
-                    const safeMessage = message.replace(/'/g, "\\'").replace(/"/g, '\\"');
-                    const safeName = name.replace(/'/g, "\\'").replace(/"/g, '\\"');
-                    
-                    const isRecent = index < 5; // Marque les 5 premiers messages comme "Nouveau"
-
-                    const div = document.createElement('div');
-                    div.className = `testimonial bg-white p-7 md:p-10 mb-8 rounded-2xl shadow-xl relative border-l-8 border-secondary-pink/70 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-0.5 ${isRecent ? 'recent' : ''}`;
-                    
-                    const newBadge = isRecent 
-                        ? `<span class="bg-primary-wine text-white text-xs font-bold px-3 py-1 rounded-full ml-3 tracking-widest uppercase shadow-md">Nouveau !</span>` 
-                        : '';
-
-                    div.innerHTML = `
-                        <div class="testimonial-header flex justify-between items-start mb-4 border-b border-primary-wine/30 pb-3">
-                            <strong class="text-2xl font-display font-bold text-primary-wine">${name} ${newBadge}</strong>
-                            <small class="text-gray-500 italic text-sm mt-1">Écrit le ${date}</small>
-                        </div>
-                        
-                        <p class="text-elegant-gray whitespace-pre-line text-lg mb-4 font-serif leading-relaxed italic border-l-4 border-secondary-pink/20 pl-4">“${message}”</p>
-                        
-                        <button 
-                            onclick="shareWhatsApp('${safeMessage}','${safeName}')" 
-                            class="whatsapp-share-button"
-                            title="Partager ce message sur WhatsApp"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="w-5 h-5">
-                                <path d="M12.031 0C5.405 0 0 5.405 0 12.031c0 2.067.531 4.01 1.54 5.71l-.974 3.766 3.868-.973c1.676.953 3.593 1.458 5.497 1.458 6.626 0 12.031-5.405 12.031-12.031C24.062 5.405 18.657 0 12.031 0z"/>
-                            </svg>
-                        </button>
-                    `;
-                    livre.appendChild(div);
-                });
-            }, (error) => {
-                console.error("Erreur onSnapshot Firestore :", error);
-                messageCountElement.innerHTML = `<span class="text-red-600 font-extrabold text-5xl mr-2">!</span> Erreur de chargement.`;
-                livre.innerHTML = "<p class='text-center text-red-600 mt-10 p-4 bg-white rounded-xl shadow-md'>⚠️ Erreur : Problème de connexion en temps réel aux messages. Vérifiez les règles de lecture.</p>";
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', initializeAppAndLoad);
-    </script>
-
     <style>
-        /* Styles de base pour le corps et la mise en page (Harmonisation) */
+        /* Variables CSS */
+        :root {
+            --rose-fonce: #8a0c4f;
+            --rose-doux: #e990b0;
+            --fond: #fffcf8;
+            --fond-secondaire: #fef0f4;
+            --texte: #3c3c3c;
+        }
+
         body {
             font-family: theme('fontFamily.serif');
-            background-color: theme('colors.bg-paper');
-            line-height: 1.6;
+            background: linear-gradient(135deg, var(--fond), var(--fond-secondaire));
+            color: var(--texte);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
-            color: theme('colors.elegant-gray');
-        }
-        
-        main {
-            flex-grow: 1;
-            max-width: 1000px;
-            margin: 40px auto;
-            width: 95%;
-            padding: 40px;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.2); 
-            border-radius: 20px;
-            background-color: white; 
-            border-top: 8px solid theme('colors.primary-wine');
+            text-align: center;
         }
 
-        /* TITRES ET COMPTEUR */
-        h1 {
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+            flex-grow: 1;
+        }
+
+        /* --- STYLES CORRIGÉS --- */
+        
+        /* Titre principal corrigé */
+        .main-title {
+            color: var(--rose-fonce);
             font-family: theme('fontFamily.display');
             letter-spacing: 3px;
+            text-shadow: 2px 3px 5px rgba(0,0,0,0.1); 
+            font-weight: 700;
+        }
+        
+        /* Citation d'introduction améliorée */
+        .intro-quote {
+            max-width: 650px;
+            margin: 30px auto 40px auto;
+            font-family: theme('fontFamily.serif');
+            font-size: 1.5rem;
+            line-height: 1.8;
+            color: #555;
+            border-left: 5px solid var(--rose-doux);
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.5); 
+            border-radius: 5px;
+            font-style: italic;
         }
 
-        .intro {
-            font-family: theme('fontFamily.sacramento'); 
-            color: theme('colors.primary-wine');
-            border-bottom: 2px solid theme('colors.secondary-pink'); 
-            font-size: 2.2rem;
-            line-height: 1.4;
-            padding-bottom: 10px;
-        }
-
-        /* NOUVEAU: Style pour les messages récents (effet "Nouveau") */
-        .testimonial.recent {
-            border-left: 8px solid theme('colors.primary-wine') !important;
-            box-shadow: 0 10px 40px rgba(138, 12, 79, 0.25);
-        }
-
-        /* --- STYLES CARROUSEL --- */
-        .hero-carousel-container {
-            position: relative;
-            height: 450px;
-            margin-bottom: 50px;
-            overflow: hidden; 
+        /* Cartes de messages (Témoignages) */
+        .testimonial-card {
+            background: #ffffff;
+            padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            border: 1px solid var(--fond-secondaire);
+            text-align: left;
+            position: relative;
         }
-        .carousel-track {
-            display: flex;
-            width: 400%; 
+        
+        .testimonial-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 8px;
             height: 100%;
+            background: linear-gradient(to bottom, var(--rose-fonce), var(--rose-doux));
+            border-top-left-radius: 15px;
+            border-bottom-left-radius: 15px;
         }
-        .carousel-item {
-            width: 25%; 
-            flex-shrink: 0;
+        
+        .testimonial-name {
+            font-family: theme('fontFamily.display');
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--rose-fonce);
+            margin-bottom: 5px;
+            padding-left: 15px; /* Décalage pour aligner après la barre latérale */
         }
-        .carousel-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; 
-            filter: brightness(90%);
+        
+        .testimonial-message {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-top: 10px;
+            padding-left: 15px;
+            color: #444;
         }
 
-        /* --- BOUTONS D'ACTION STYLÉS (Imprimer et Retour) --- */
+        .testimonial-date {
+            font-size: 0.85rem;
+            color: #999;
+            font-style: italic;
+            padding-left: 15px;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        /* --- STYLES DES BOUTONS (Uniformisation) --- */
         .action-button {
-            /* Style unifié et pro */
-            @apply inline-flex items-center 
+            /* Boutons d'impression et de retour */
+            @apply inline-flex items-center justify-center 
                    px-10 py-4 
-                   rounded-full text-white 
-                   text-lg font-bold tracking-wider 
-                   transition-all duration-300 transform 
-                   hover:scale-[1.03] focus:outline-none 
-                   shadow-xl; 
-        }
+                   text-xl font-extrabold text-white
+                   rounded-full 
+                   transition-all duration-300 ease-out; 
 
-        /* Bouton Imprimer: Couleur Contraste (Vert Pro / Bleu Marine) - Rendu professionnel */
-        .print-button {
-            background: linear-gradient(135deg, #10B981, #059669); /* Vert Emeraude */
-            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.6); 
+            box-shadow: 0 8px 20px rgba(138, 12, 79, 0.5); 
+            letter-spacing: 1px;
             text-transform: uppercase;
-        }
-        .print-button:hover {
-            box-shadow: 0 12px 30px rgba(16, 185, 129, 0.8);
-        }
-
-        /* Bouton Retour: Couleur Primaire (Harmonie avec le site) */
-        .back-button {
-            background: linear-gradient(135deg, theme('colors.primary-wine'), theme('colors.secondary-pink'));
-            box-shadow: 0 8px 20px rgba(138, 12, 79, 0.6); 
-            text-transform: uppercase;
-        }
-        .back-button:hover {
-            box-shadow: 0 10px 25px rgba(138, 12, 79, 0.8);
+            width: 300px;
+            margin: 15px auto;
         }
 
-        /* Bouton Partage WhatsApp sur chaque message */
-        .whatsapp-share-button {
-            @apply absolute bottom-4 right-4 p-3 rounded-full 
-                   bg-green-500 hover:bg-green-600 
-                   transition duration-200 shadow-lg 
-                   transform hover:scale-110 focus:outline-none;
-            width: 48px;
-            height: 48px;
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(138, 12, 79, 0.7);
         }
 
-        /* MEDIA PRINT (Optimisation pour l'impression papier) */
+        #printButton {
+            background: linear-gradient(135deg, #4CAF50, #008000); /* Vert professionnel */
+        }
+        #printButton:hover {
+            background: linear-gradient(135deg, #008000, #4CAF50);
+        }
+
+        #returnButton {
+            background: linear-gradient(135deg, var(--rose-fonce), #FF69B4); /* Dégradé harmonisé */
+        }
+        #returnButton:hover {
+            background: linear-gradient(135deg, #FF69B4, var(--rose-fonce));
+        }
+
+
+        /* --- STYLES D'IMPRESSION (@media print) --- */
         @media print {
-            body { background: white; padding: 0; margin: 0; }
-            main { box-shadow: none; border-radius: 0; margin: 0; padding: 0; width: 100%; border: none; }
-            .action-button-container, footer, .hero-carousel-container, .whatsapp-share-button, .intro, #messageCount { 
-                display: none !important; 
+            body {
+                background: none;
+                color: #000;
+                font-size: 12pt;
             }
-            .testimonial {
-                box-shadow: none !important;
-                border: 1px dashed #ccc;
-                page-break-inside: avoid;
+            main {
+                max-width: none;
+                margin: 0;
+                padding: 0;
+            }
+            .no-print {
+                display: none !important;
+            }
+            header, footer {
+                display: none;
+            }
+            h1, .intro-quote, #messageCount {
+                text-align: center;
+                margin-top: 1em;
+            }
+            .testimonial-card {
+                box-shadow: none;
+                border: 1px solid #ccc;
                 margin-bottom: 20px;
-                padding: 20px;
-                border-left: 5px solid theme('colors.primary-wine') !important; 
+                break-inside: avoid; /* Empêche les coupures au milieu des messages */
             }
-            .testimonial-header strong { color: black !important; }
-            .testimonial p { font-style: normal; font-size: 1.1em; color: black; }
+            .testimonial-card::before {
+                display: none; /* Cache la barre latérale colorée à l'impression */
+            }
+            .testimonial-name, .testimonial-message, .testimonial-date {
+                padding-left: 0;
+            }
         }
+
     </style>
 </head>
 
 <body>
-    <main>
-        <div class="hero-carousel-container" id="heroCarouselContainer">
-            <div class="carousel-track" id="bookCarousel">
-                <div class="carousel-item"><img src="book_photo1.JPG" alt="Ruth Mulimbi - Photo 1" loading="lazy"></div>
-                <div class="carousel-item"><img src="book_photo2.JPG" alt="Ruth Mulimbi - Photo 2" loading="lazy"></div>
-                <div class="carousel-item"><img src="book_photo3.JPG" alt="Ruth Mulimbi - Photo 3" loading="lazy"></div>
-                <div class="carousel-item"><img src="book_photo1.JPG" alt="Ruth Mulimbi - Photo 1" loading="lazy"></div>
-            </div>
-        </div>
+    <header class="no-print">
+        <div class="h-5 bg-primary-wine"></div>
+    </header>
 
-        <h1 class="text-4xl lg:text-5xl text-center mt-0 mb-4 text-primary-wine">Livre d'Or des Souhaits</h1>
+    <main>
         
-        <p id="messageCount" class="text-center font-serif text-xl mb-10 text-gray-600">
-            Chargement du compte...
+        <h1 class="main-title text-5xl lg:text-6xl text-center mt-12 mb-2 font-extrabold tracking-widest">
+            Livre d'Or des Souhaits
+        </h1>
+        
+        <p id="messageCount" class="text-xl font-display text-gray-700 mb-8 font-bold">
+            <span class="text-4xl text-primary-wine font-extrabold" id="countValue">...</span> messages enregistrés 💖
         </p>
 
-        <div class="intro text-center pb-4 mb-10 mx-auto max-w-2xl">
-            « Un bouquin d’amour et de bénédictions pour Ruth Mulimbi, célébrons la bonne personne qu'elle est. Joyeux Anniversaire Maria ! »
-        </div>
+        <blockquote class="intro-quote">
+            « Un bouquin d'amour et de bénédictions pour Ruth Mulimbi, célébrons la bonne personne qu'elle est. Joyeux Anniversaire ! »
+        </blockquote>
 
-        <div id="livre" class="space-y-6">
-            <div class="text-center text-gray-400 p-8 font-serif">Connexion et chargement des messages...</div>
-        </div>
+        <section id="testimonialsContainer" class="mt-8"></section>
 
-        <div class="action-button-container flex flex-wrap justify-center gap-6 mt-16 mb-12">
+        <div class="no-print flex flex-col items-center justify-center pt-8 pb-16">
             
-            <button onclick="window.print()" class="action-button print-button">
-                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m0 0l2.585 2.585a2 2 0 002.828 0L17 17m0 0v-4a2 2 0 00-2-2h-4a2 2 0 00-2 2v4"></path></svg>
+            <button id="printButton" class="action-button" onclick="window.print()">
+                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m0 0v-2a2 2 0 012-2h4a2 2 0 012 2v2m-5 0h2m-7.5 0h3"></path></svg>
                 Imprimer le livre
             </button>
-
-            <a href="index.html" class="action-button back-button">
-                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 15l-3-3m0 0l3-3m-3 3h8m-9 6h10a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+            
+            <a href="index.html" id="returnButton" class="action-button">
+                <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12"></path></svg>
                 Retour à l'accueil
             </a>
         </div>
+
     </main>
 
     <footer>
-        <p class="text-gray-500 font-serif text-sm">— Créé avec amour par Gabby Umba 2025 —</p>
+        <span class="text-gray-500 mb-6 block text-sm">---  Gabby Umba 2025 ---</span>
     </footer>
 
+
+    <script>
+        // Initialisation Firebase (compatible v9, SANS AUTH)
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'lwangagestion';
+
+        const firebaseConfig = typeof __firebase_config !== 'undefined' 
+            ? JSON.parse(__firebase_config) 
+            : {
+                apiKey: "AIzaSyCQdZppl-UsPCXF8iFmXQpcGAFjHEMt838",
+                authDomain: "gestion-saint-charles-lwanga.firebaseapp.com",
+                projectId: "gestion-saint-charles-lwanga",
+                storageBucket: "gestion-saint-charles-lwanga.firebasestorage.app",
+                messagingSenderId: "508302363143",
+                appId: "1:508302363143:web:35c181528dd84def1a78a2"
+            };
+
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Références aux éléments du DOM
+        const container = document.getElementById('testimonialsContainer');
+        const countValue = document.getElementById('countValue');
+        const collectionPath = `artifacts/${appId}/public/data/testimonials`;
+
+        // Fonction de formatage de la date (J/M/A)
+        const formatDate = (timestamp) => {
+            if (!timestamp) return 'Date inconnue';
+            // Utiliser la méthode toDate() de Firebase Timestamp
+            const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+            return date.toLocaleDateString('fr-FR', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric'
+            });
+        };
+
+        // Fonction pour charger et afficher les messages
+        const loadTestimonials = async () => {
+            container.innerHTML = '';
+            
+            try {
+                // Requête : tri par date décroissante
+                const snapshot = await db.collection(collectionPath)
+                                         .orderBy('timestamp', 'desc') 
+                                         .get();
+
+                if (snapshot.empty) {
+                    container.innerHTML = '<p class="text-2xl text-gray-500 mt-16 font-display">Aucun message n\'a encore été enregistré. Soyez le premier !</p>';
+                    countValue.textContent = '0';
+                    return;
+                }
+                
+                let count = 0;
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const formattedDate = formatDate(data.timestamp);
+                    count++;
+                    
+                    // Création de la carte de message (Utilise les nouveaux styles CSS)
+                    const card = `
+                        <div class="testimonial-card">
+                            <h3 class="testimonial-name">${data.name || 'Anonyme'}</h3>
+                            <span class="testimonial-date">Écrit le ${formattedDate}</span>
+                            <p class="testimonial-message">« ${data.message} »</p>
+                        </div>
+                    `;
+                    container.innerHTML += card;
+                });
+
+                countValue.textContent = count;
+
+            } catch (error) {
+                console.error("Erreur de chargement des messages:", error);
+                // Message d'erreur élégant si la base de données ne peut pas être contactée (règles)
+                container.innerHTML = `
+                    <div class="mt-16 p-6 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-lg">
+                        <p class="text-xl font-bold font-display">⚠️ Erreur : Impossible de se connecter à la base de données.</p>
+                        <p class="mt-2">Veuillez vérifier les règles de sécurité Firestore pour vous assurer que la lecture est autorisée (allow read: if true).</p>
+                    </div>
+                `;
+                countValue.textContent = 'Erreur';
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', loadTestimonials);
+    </script>
 </body>
 </html>
