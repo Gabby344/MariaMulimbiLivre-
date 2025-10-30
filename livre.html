@@ -191,7 +191,18 @@
             width: 300px;
             margin: 15px auto;
         }
-        /* ... (styles d'impression omis pour la concision ici, mais conservés dans le code complet) ... */
+        
+        @media print {
+            body { background: none; color: #000; font-size: 12pt; }
+            main { max-width: none; margin: 0; padding: 0; }
+            .no-print { display: none !important; }
+            header, footer { display: none; }
+            h1, .intro-quote, #messageCount { text-align: center; margin-top: 1em; }
+            .testimonial-card { box-shadow: none; border: 1px solid #ccc; margin-bottom: 20px; break-inside: avoid; }
+            .testimonial-card::before { display: none; }
+            .testimonial-name, .testimonial-message, .testimonial-date { padding-left: 0; }
+            .testimonial-signature { font-family: Arial, sans-serif !important; font-size: 1.2em; color: #000; border-top: 1px solid #ccc; }
+        }
     </style>
 </head>
 
@@ -215,22 +226,16 @@
         </blockquote>
 
         <div class="no-print bg-white p-6 rounded-xl shadow-lg mb-10 border-t-4 border-secondary-pink">
-            <h3 class="text-xl font-display font-bold text-primary-wine mb-4">Explorer les Souhaits :</h3>
+            <h3 class="text-xl font-display font-bold text-primary-wine mb-4">Filtrer par Catégorie :</h3>
             
-            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-4">
+            <div class="flex justify-center">
                 
-                <select id="filterCategory" class="p-3 border rounded-lg w-full md:w-1/2 focus:ring-2 focus:ring-primary-wine/50">
+                <select id="filterCategory" class="p-3 border rounded-lg w-full max-w-md focus:ring-2 focus:ring-primary-wine/50">
                     <option value="all">— Afficher toutes les catégories —</option>
                     <option value="love">💖 Mot d'Amour & Félicitations</option>
                     <option value="blessing">🙏 Bénédiction & Prière</option>
                     <option value="memory">🌟 Souvenir Mémorable</option>
                     <option value="humor">😂 Blague & Humour</option>
-                </select>
-
-                <select id="sortOrder" class="p-3 border rounded-lg w-full md:w-1/2 focus:ring-2 focus:ring-primary-wine/50">
-                    <option value="desc">🗓️ Du plus Récent au plus Ancien</option>
-                    <option value="asc">🗓️ Du plus Ancien au plus Récent</option>
-                    <option value="name_asc">🔠 Par Nom (A-Z)</option>
                 </select>
             </div>
         </div>
@@ -253,7 +258,7 @@
     </main>
 
     <footer>
-        <span class="text-gray-500 mb-6 block text-sm">--- Gabby Umba 2025 ---</span>
+        <span class="text-gray-500 mb-6 block text-sm">--- Créé avec amour par Gabby Umba 2025 ---</span>
     </footer>
 
 
@@ -291,7 +296,7 @@
             });
         };
 
-        // LOGIQUE DES RÉACTIONS (J'aime/Adore)
+        // LOGIQUE DES RÉACTIONS
         const handleReaction = async (docId, reactionType, button) => {
             const docRef = db.collection(collectionPath).doc(docId);
             
@@ -318,30 +323,25 @@
             }
         };
 
-        // Fonction pour charger et afficher les messages (avec filtre/tri)
-        const loadTestimonials = async (categoryFilter = 'all', sortParam = 'timestamp', sortDirection = 'desc') => {
+        // Fonction pour charger et afficher les messages (avec filtre)
+        const loadTestimonials = async (categoryFilter = 'all') => {
             container.innerHTML = '';
             
             try {
                 let query = db.collection(collectionPath);
                 
-                // 1. Appliquer le Filtre de Catégorie
+                // Appliquer le Filtre de Catégorie
                 if (categoryFilter !== 'all') {
                     query = query.where('category', '==', categoryFilter);
                 }
 
-                // 2. Appliquer le Tri
-                if (sortParam === 'name') {
-                    query = query.orderBy('name', sortDirection);
-                    query = query.orderBy('timestamp', 'desc'); 
-                } else {
-                    query = query.orderBy(sortParam, sortDirection);
-                }
+                // Ordre par défaut : plus récent en premier
+                query = query.orderBy('timestamp', 'desc');
 
                 const snapshot = await query.get();
 
                 if (snapshot.empty) {
-                    container.innerHTML = '<p class="text-2xl text-gray-500 mt-16 font-display">Aucun message trouvé dans cette catégorie/ce tri.</p>';
+                    container.innerHTML = '<p class="text-2xl text-gray-500 mt-16 font-display">Aucun message trouvé dans cette catégorie.</p>';
                     countValue.textContent = '0';
                     return;
                 }
@@ -384,6 +384,7 @@
                                 </button>
                             </div>
                         </div>
+
                         <div class="mt-8 flex justify-end items-end">
                             <div>
                                 <span class="testimonial-date">Le ${formattedDate}</span>
@@ -400,51 +401,28 @@
 
             } catch (error) {
                 console.error("Erreur de chargement des messages:", error);
-                if (error.code === 'failed-precondition') {
-                    container.innerHTML = `
-                        <div class="mt-16 p-6 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 rounded-lg">
-                            <p class="text-xl font-bold font-display">⚠️ Index Manquant pour le Tri !</p>
-                            <p class="mt-2">Veuillez cliquer sur le lien dans l'erreur de la console pour créer l'index composite requis dans Firebase pour le tri par Nom.</p>
-                        </div>
-                    `;
-                } else {
-                    container.innerHTML = `
-                        <div class="mt-16 p-6 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-lg">
-                            <p class="text-xl font-bold font-display">❌ Erreur de Connexion à la base de données.</p>
-                        </div>
-                    `;
-                }
+                 container.innerHTML = `
+                    <div class="mt-16 p-6 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-lg">
+                        <p class="text-xl font-bold font-display">❌ Erreur de Connexion à la base de données.</p>
+                        <p class="mt-2">Veuillez vérifier vos règles Firestore (allow read: if true).</p>
+                    </div>
+                `;
                 countValue.textContent = 'Erreur';
             }
         };
 
-        // Gestion des événements de Filtre et de Tri & Réactions
+        // Gestion des événements de Filtre
         document.addEventListener('DOMContentLoaded', () => {
             loadTestimonials(); // Chargement initial
             
             const filterCategory = document.getElementById('filterCategory');
-            const sortOrder = document.getElementById('sortOrder');
 
-            const applyFiltersAndSort = () => {
+            const applyFilters = () => {
                 const category = filterCategory.value;
-                const sortValue = sortOrder.value;
-                
-                let sortParam = 'timestamp';
-                let sortDirection = 'desc';
-
-                if (sortValue === 'asc' || sortValue === 'desc') {
-                    sortParam = 'timestamp';
-                    sortDirection = sortValue;
-                } else if (sortValue === 'name_asc') {
-                    sortParam = 'name';
-                    sortDirection = 'asc';
-                }
-                
-                loadTestimonials(category, sortParam, sortDirection);
+                loadTestimonials(category);
             };
 
-            if (filterCategory) filterCategory.addEventListener('change', applyFiltersAndSort);
-            if (sortOrder) sortOrder.addEventListener('change', applyFiltersAndSort);
+            if (filterCategory) filterCategory.addEventListener('change', applyFilters);
 
             // Écouteur global pour les boutons de réaction
             document.addEventListener('click', (e) => {
