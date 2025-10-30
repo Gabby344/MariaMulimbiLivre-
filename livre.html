@@ -60,8 +60,6 @@
         }
 
         /* --- STYLES CORRIGÉS --- */
-        
-        /* Titre principal corrigé */
         .main-title {
             color: var(--rose-fonce);
             font-family: theme('fontFamily.display');
@@ -70,7 +68,6 @@
             font-weight: 700;
         }
         
-        /* Citation d'introduction améliorée */
         .intro-quote {
             max-width: 650px;
             margin: 30px auto 40px auto;
@@ -85,6 +82,17 @@
             font-style: italic;
         }
 
+        /* --- NOUVEAU: Animation d'entrée --- */
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-message {
+            animation: fade-in-up 0.5s ease-out forwards;
+            opacity: 0; /* Assure qu'ils sont invisibles avant l'animation */
+        }
+        
         /* Cartes de messages (Témoignages) */
         .testimonial-card {
             background: #ffffff;
@@ -115,29 +123,45 @@
             font-weight: 700;
             color: var(--rose-fonce);
             margin-bottom: 5px;
-            padding-left: 15px; /* Décalage pour aligner après la barre latérale */
+            padding-left: 15px; 
+            border-bottom: 1px dashed #eee;
+            padding-bottom: 10px;
         }
         
         .testimonial-message {
             font-size: 1.1em;
             line-height: 1.6;
-            margin-top: 10px;
+            margin-top: 15px;
             padding-left: 15px;
             color: #444;
+            font-style: italic;
+        }
+        
+        /* --- NOUVEAU: Signature Manuscrite --- */
+        .testimonial-signature {
+            display: block;
+            text-align: right;
+            margin-top: 20px;
+            font-family: theme('fontFamily.sacramento'); 
+            font-size: 2.2rem; 
+            color: var(--rose-fonce);
+            line-height: 1;
+            padding-top: 10px;
+            border-top: 1px dashed var(--rose-doux);
         }
 
         .testimonial-date {
             font-size: 0.85rem;
             color: #999;
-            font-style: italic;
-            padding-left: 15px;
-            margin-bottom: 15px;
+            font-style: normal; /* Annule l'italic parent */
             display: block;
+            text-align: right;
+            margin-top: 5px;
+            margin-bottom: 0;
         }
         
         /* --- STYLES DES BOUTONS (Uniformisation) --- */
         .action-button {
-            /* Boutons d'impression et de retour */
             @apply inline-flex items-center justify-center 
                    px-10 py-4 
                    text-xl font-extrabold text-white
@@ -157,14 +181,14 @@
         }
 
         #printButton {
-            background: linear-gradient(135deg, #4CAF50, #008000); /* Vert professionnel */
+            background: linear-gradient(135deg, #4CAF50, #008000); 
         }
         #printButton:hover {
             background: linear-gradient(135deg, #008000, #4CAF50);
         }
 
         #returnButton {
-            background: linear-gradient(135deg, var(--rose-fonce), #FF69B4); /* Dégradé harmonisé */
+            background: linear-gradient(135deg, var(--rose-fonce), #FF69B4); 
         }
         #returnButton:hover {
             background: linear-gradient(135deg, #FF69B4, var(--rose-fonce));
@@ -197,13 +221,20 @@
                 box-shadow: none;
                 border: 1px solid #ccc;
                 margin-bottom: 20px;
-                break-inside: avoid; /* Empêche les coupures au milieu des messages */
+                break-inside: avoid;
             }
             .testimonial-card::before {
-                display: none; /* Cache la barre latérale colorée à l'impression */
+                display: none;
             }
             .testimonial-name, .testimonial-message, .testimonial-date {
                 padding-left: 0;
+            }
+            /* Rendre la signature plus lisible à l'impression */
+            .testimonial-signature {
+                font-family: Arial, sans-serif !important; 
+                font-size: 1.2em;
+                color: #000;
+                border-top: 1px solid #ccc;
             }
         }
 
@@ -247,7 +278,7 @@
     </main>
 
     <footer>
-        <span class="text-gray-500 mb-6 block text-sm">---  Gabby Umba 2025 ---</span>
+        <span class="text-gray-500 mb-6 block text-sm">--- Créé avec amour par Gabby Umba 2025 ---</span>
     </footer>
 
 
@@ -277,7 +308,6 @@
         // Fonction de formatage de la date (J/M/A)
         const formatDate = (timestamp) => {
             if (!timestamp) return 'Date inconnue';
-            // Utiliser la méthode toDate() de Firebase Timestamp
             const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
             return date.toLocaleDateString('fr-FR', {
                 day: '2-digit',
@@ -291,7 +321,6 @@
             container.innerHTML = '';
             
             try {
-                // Requête : tri par date décroissante
                 const snapshot = await db.collection(collectionPath)
                                          .orderBy('timestamp', 'desc') 
                                          .get();
@@ -303,27 +332,36 @@
                 }
                 
                 let count = 0;
+                let delay = 0;
                 snapshot.forEach(doc => {
                     const data = doc.data();
                     const formattedDate = formatDate(data.timestamp);
                     count++;
                     
-                    // Création de la carte de message (Utilise les nouveaux styles CSS)
-                    const card = `
-                        <div class="testimonial-card">
-                            <h3 class="testimonial-name">${data.name || 'Anonyme'}</h3>
-                            <span class="testimonial-date">Écrit le ${formattedDate}</span>
-                            <p class="testimonial-message">« ${data.message} »</p>
+                    // Utilisation de la nouvelle structure HTML et de la classe d'animation
+                    const card = document.createElement('div');
+                    card.className = 'testimonial-card animate-message';
+                    card.style.animationDelay = `${delay}ms`; 
+                    
+                    card.innerHTML = `
+                        <p class="testimonial-message">« ${data.message} »</p>
+                        
+                        <div class="mt-8 flex justify-end items-end">
+                            <div>
+                                <span class="testimonial-date">Le ${formattedDate}</span>
+                                <span class="testimonial-signature">${data.name || 'Anonyme'}</span>
+                            </div>
                         </div>
                     `;
-                    container.innerHTML += card;
+                    container.appendChild(card);
+                    
+                    delay += 100; // Délai incrémental pour l'effet de cascade
                 });
 
                 countValue.textContent = count;
 
             } catch (error) {
                 console.error("Erreur de chargement des messages:", error);
-                // Message d'erreur élégant si la base de données ne peut pas être contactée (règles)
                 container.innerHTML = `
                     <div class="mt-16 p-6 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-lg">
                         <p class="text-xl font-bold font-display">⚠️ Erreur : Impossible de se connecter à la base de données.</p>
