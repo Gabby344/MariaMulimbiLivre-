@@ -126,8 +126,21 @@
         }
         
         /* --- FORMULAIRE DESIGN PROFESSIONNEL --- */
-        form { margin: 60px auto; max-width: 650px; background: #ffffff; padding: 45px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); text-align: left; border-top: 6px solid var(--rose-fonce); transition: all 0.4s ease; }
-        form:hover { transform: translateY(-3px); box-shadow: 0 15px 45px rgba(0, 0, 0, 0.15); }
+        form { 
+            margin: 60px auto; 
+            max-width: 650px; 
+            background: #ffffff; 
+            padding: 45px; 
+            border-radius: 25px; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); 
+            text-align: left; 
+            border-top: 6px solid var(--rose-fonce); 
+            transition: all 0.4s ease; 
+        }
+        form:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.15); 
+        }
 
         label { 
             font-weight: 700; 
@@ -135,21 +148,28 @@
             display: block; 
             margin-bottom: 8px; 
             letter-spacing: 1px;
-            font-size: 1.1em;
+            font-size: 1.2em; /* Légèrement plus grand pour la lisibilité */
             font-family: theme('fontFamily.display');
         }
 
         input, textarea { 
             width: 100%; 
-            padding: 16px; 
+            padding: 18px; /* Taille légèrement augmentée pour tous les inputs/textareas */
             margin: 0 0 30px 0; 
             border-radius: 12px; 
             border: 1px solid #ccc; 
-            font-size: 1.1em; 
+            font-size: 1.2em; /* Taille de police légèrement augmentée */
             background-color: #f9f9f9;
             transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s; 
             resize: vertical; 
         }
+        /* Spécifique pour l'input du nom */
+        input#name {
+            font-size: 1.3em; /* Le champ nom est un peu plus grand */
+            font-weight: 600;
+            color: #333;
+        }
+
         input:focus, textarea:focus { 
             outline: none; 
             border-color: var(--rose-fonce); 
@@ -169,6 +189,7 @@
             box-shadow: 0 10px 25px rgba(138, 12, 79, 0.7); 
             letter-spacing: 2px;
             text-transform: uppercase;
+            transition: all 0.3s ease;
         }
         #testimonialForm button[type="submit"]:hover { 
             transform: translateY(-2px); 
@@ -379,14 +400,32 @@
                 projectId: "gestion-saint-charles-lwanga",
                 storageBucket: "gestion-saint-charles-lwanga.firebasestorage.app",
                 messagingSenderId: "508302363143",
-                appId: "1:508302363143:web:35c181528dd84def1a78a2"
+                                appId: "1:508302363143:web:35c181528dd84def1a78a2"
+
             };
 
-        // *************** ATTENTION : PROBLÈME D'ERREUR D'INITIALISATION ICI ***************
-        // Le code original (ci-dessous) peut causer l'erreur que vous avez montrée (formulaire masqué).
-        // Si le problème persiste, entourez cette section d'un 'try/catch' comme discuté précédemment.
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        // Initialisation globale pour app et db
+        let app = null;
+        let db = null;
+
+        // VÉRIFICATION CRITIQUE : Se lance seulement si le SDK Firebase est chargé
+        if (typeof firebase !== 'undefined' && typeof firebase.initializeApp === 'function') {
+            try {
+                // Tente l'initialisation
+                app = firebase.initializeApp(firebaseConfig);
+                db = firebase.firestore();
+                console.log("Firebase initialisé avec succès.");
+            } catch (error) {
+                // Affiche l'erreur dans la console, mais continue le chargement
+                console.error("ATTENTION: Erreur d'initialisation de Firebase. Les envois de messages échoueront. Vérifiez la configuration et les dépendances.", error);
+                // On peut définir db à null pour indiquer que Firebase n'est pas fonctionnel
+                db = null; 
+            }
+        } else {
+            console.error("Le SDK Firebase ou la fonction initializeApp n'est pas chargé(e). Envoi impossible.");
+            // Si Firebase n'est pas chargé du tout, db reste null
+        }
+
 
         // Références aux éléments du DOM
         const form = document.getElementById('testimonialForm');
@@ -398,15 +437,22 @@
 
         // Fonctions Modal
         function openModal(id) {
-            document.getElementById(id).classList.add('open');
+            const modal = document.getElementById(id);
+            modal.classList.add('open');
+            modal.querySelector('a, button').focus(); // Focus sur le premier élément cliquable pour accessibilité
         }
         function closeModal(id) {
             document.getElementById(id).classList.remove('open');
         }
+        window.closeModal = closeModal; // Rendre accessible globalement pour onclick
+
 
         // 1. Démarrage de la musique et déblocage au 1er clic
         document.addEventListener('DOMContentLoaded', () => {
-             music.play().catch(e => console.log("Autoplay bloqué.")); 
+             music.play().catch(e => {
+                 console.log("Autoplay de la musique bloqué, déblocage au premier clic.");
+             }); 
+             
              document.body.addEventListener('click', () => {
                 if (music.muted) {
                     music.muted = false;
@@ -451,19 +497,33 @@
             const message = document.getElementById('message').value.trim();
 
             if (name.length < 2 || message.length < 5) {
-                errorMessage.textContent = "Merci d’écrire un prénom et un message sincère (minimum 5 caractères) 💕";
+                errorMessage.textContent = "Merci d’écrire un prénom/nom (min 2 caractères) et un message sincère (min 5 caractères) 💕";
                 errorMessage.style.display = 'block';
                 return;
             }
 
+            const submitButton = form.querySelector('button[type="submit"]');
+
+            // --- NOUVEAU: Vérification de Firebase avant l'envoi ---
+            if (!db) {
+                errorMessage.textContent = `❌ Échec: Le service d'envoi est indisponible. Veuillez contacter l'administrateur pour vérifier les clés de configuration et l'état de Firebase.`;
+                errorMessage.style.display = 'block';
+                return;
+            }
+            // ----------------------------------------------------
+            
             const collectionPath = `artifacts/${appId}/public/data/testimonials`;
 
+            // Désactiver le bouton pour éviter les doubles soumissions
+            submitButton.disabled = true;
+            submitButton.textContent = "Envoi en cours...";
+
             try {
-                // Écriture dans Firestore (Fonctionne sans Auth si règles = if true)
                 await db.collection(collectionPath).add({
                     name: name,
                     message: message,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    dateAdded: new Date().toISOString() 
                 });
 
                 // Succès : Confettis et Modal Pro
@@ -478,8 +538,12 @@
                 
             } catch (error) {
                 console.error("Erreur lors de l'ajout du document: ", error);
-                errorMessage.textContent = `❌ Erreur lors de l'envoi. Veuillez vérifier vos règles Firebase. Erreur: ${error.message}.`;
+                errorMessage.textContent = `❌ Erreur lors de l'envoi. Veuillez vérifier vos règles de sécurité Firestore. Erreur: ${error.message}.`;
                 errorMessage.style.display = 'block';
+            } finally {
+                // Réactiver le bouton
+                submitButton.disabled = false;
+                submitButton.textContent = "✨ Ajouter au livre";
             }
         });
     </script>
